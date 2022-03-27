@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 6.0.2, 2022-03-24T10:48:44. -->
+<!-- Written by QtCreator 6.0.2, 2022-03-25T15:49:12. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -118,11 +118,11 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">D:/GithubRepositories/QPyside/mainwindow.py</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/GithubRepositories/QPyside/mainwindow.py</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/GithubRepositories/QPyside/mainwindow.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">D:/GithubRepositories/QPyside/MainWindow.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/GithubRepositories/QPyside/MainWindow.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/GithubRepositories/QPyside/MainWindow.py</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{d1cf9b86-c3fc-452c-87c9-88638de4401c}</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:\GithubRepositories\QPyside\mainwindow.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">D:\GithubRepositories\QPyside\MainWindow.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>

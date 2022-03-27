@@ -1,4 +1,13 @@
+import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtLocation 5.15
+import QtPositioning 5.15
+
+import "menus"
+import "models"
+
+import VdrPhoneSensorDataModel 1.0
+
 
 ApplicationWindow {
     id: mainWindow
@@ -7,25 +16,30 @@ ApplicationWindow {
     visible: true
     title: qsTr("Hello World")
 
-    menuBar: MenuBar {
-        Menu {
-            title: qsTr("&File")
-            Action { text: qsTr("&New...") }
-            Action { text: qsTr("&Open...") }
-            Action { text: qsTr("&Save") }
-            Action { text: qsTr("Save &As...") }
-            MenuSeparator { }
-            Action { text: qsTr("&Quit") }
-        }
-        Menu {
-            title: qsTr("&Edit")
-            Action { text: qsTr("Cu&t") }
-            Action { text: qsTr("&Copy") }
-            Action { text: qsTr("&Paste") }
-        }
-        Menu {
-            title: qsTr("&Help")
-            Action { text: qsTr("&About") }
-        }
+    VdrPhoneSensorDataModel {
+        id: vdrPhoneSensorDataModel1
     }
+
+    menuBar: mainMenu
+
+    MainMenuBar {
+        id: mainMenu
+    }
+
+    Plugin {
+        id: myPlugin
+        name: "osm"
+    }
+
+    Map {
+        id: map
+        anchors.fill: parent
+        plugin: myPlugin;
+        center {
+            latitude: 59.9485
+            longitude: 10.7686
+        }
+        zoomLevel: 13
+    }
+
 }

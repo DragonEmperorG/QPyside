@@ -1,3 +1,7 @@
 {
-    "files": ["MainWindow.py","MainWindow.qml"]
+    "files": [
+        "MainWindow.py",
+        "MainWindow.qml",
+        "./menus/MainMenu.qml"
+    ]
 }

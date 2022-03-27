@@ -3,15 +3,20 @@ import os
 from pathlib import Path
 import sys
 
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtQuickControls2 import QQuickStyle
+from PySide2.QtGui import QGuiApplication
+from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
+from PySide2.QtQuickControls2 import QQuickStyle
+
+from models.VdrPhoneSensorDataModel import VdrPhoneSensorDataModel
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
     QQuickStyle.setStyle("Material")
     engine = QQmlApplicationEngine()
+
+    qmlRegisterType(VdrPhoneSensorDataModel, "VdrPhoneSensorDataModel", 1, 0, "VdrPhoneSensorDataModel")
+
     engine.load(os.fspath(Path(__file__).resolve().parent / "MainWindow.qml"))
     if not engine.rootObjects():
         sys.exit(-1)
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
