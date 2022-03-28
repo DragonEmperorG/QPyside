@@ -1,7 +1,9 @@
-from PySide2.QtCore import QAbstractListModel
+from PySide2.QtCore import Slot
 
 
-class VdrPhoneSensorDataModel(QAbstractListModel):
+class VdrPhoneSensorDataModel:
     def __init__(self):
         super(VdrPhoneSensorDataModel, self).__init__()
         self.name = 1
+
+

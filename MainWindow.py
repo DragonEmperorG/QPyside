@@ -7,14 +7,14 @@ from PySide2.QtGui import QGuiApplication
 from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PySide2.QtQuickControls2 import QQuickStyle
 
-from models.VdrPhoneSensorDataModel import VdrPhoneSensorDataModel
+from models.VdrProject import VdrProject
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
     QQuickStyle.setStyle("Material")
     engine = QQmlApplicationEngine()
 
-    qmlRegisterType(VdrPhoneSensorDataModel, "VdrPhoneSensorDataModel", 1, 0, "VdrPhoneSensorDataModel")
+    qmlRegisterType(VdrProject, "VdrProject", 1, 0, "VdrProject")
 
     engine.load(os.fspath(Path(__file__).resolve().parent / "MainWindow.qml"))
     if not engine.rootObjects():

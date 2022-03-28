@@ -20,7 +20,10 @@ MenuBar {
     }
     Menu {
         title: qsTr("R&un")
-        Action { text: qsTr("Test") }
+        Action {
+            text: qsTr("Test")
+            onTriggered: testVdrProject.open_project()
+        }
     }
     Menu {
         title: qsTr("&Help")

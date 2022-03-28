@@ -6,7 +6,7 @@ import QtPositioning 5.15
 import "menus"
 import "models"
 
-import VdrPhoneSensorDataModel 1.0
+import VdrProject 1.0
 
 
 ApplicationWindow {
@@ -14,10 +14,10 @@ ApplicationWindow {
     width: 800
     height: 600
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("VDR Studio")
 
-    VdrPhoneSensorDataModel {
-        id: vdrPhoneSensorDataModel1
+    VdrProject {
+        id: testVdrProject
     }
 
     menuBar: mainMenu
