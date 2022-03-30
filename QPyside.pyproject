@@ -2,6 +2,6 @@
     "files": [
         "MainWindow.py",
         "MainWindow.qml",
-        "./menus/MainMenu.qml"
+        "./menus/MainMenuBar.qml"
     ]
 }

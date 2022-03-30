@@ -1,9 +1,10 @@
 from PySide2.QtCore import Slot
 
 
-class VdrPhoneSensorDataModel:
+class VdrPhoneSensorsData:
     def __init__(self):
-        super(VdrPhoneSensorDataModel, self).__init__()
-        self.name = 1
+        super(VdrPhoneSensorsData, self).__init__()
+        self.phone_name = 'unknown'
+        self.raw_csv_data = None
 
 
