@@ -1,6 +1,3 @@
-from PySide2.QtCore import Slot
-
-
 class VdrPhoneSensorsData:
     def __init__(self):
         super(VdrPhoneSensorsData, self).__init__()

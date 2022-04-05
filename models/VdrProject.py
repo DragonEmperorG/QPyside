@@ -1,29 +1,22 @@
 import os
 import pandas as pd
-from pathlib import Path
-
-from PySide2.QtCore import Slot, QAbstractItemModel
 
 from models.VdrAlkaidSensorsData import VdrAlkaidSensorsData
 from models.VdrPhoneSensorsData import VdrPhoneSensorsData
+from models.VdrProjectViewItem import VdrProjectViewItem
 
 
-class VdrProjectModel(QAbstractItemModel):
-    def __init__(self):
-        super().__init__()
+class VdrProject:
+    def __init__(self, path):
+        self.project_name = ""
         self.alkaid_collector = None
         self.phone_collector_list = []
+        self.parse_vdr_project(path)
 
-    @Slot()
-    def open_project(self):
-        datasets_root = os.path.join(Path(__file__).resolve().parent.parent, 'datasets')
-        # project_list = os.listdir(datasets_root)
-
-        current_project_folder_name = '20220315_WHUSPARK_TEST'
-        current_project_folder_path = os.path.join(datasets_root, current_project_folder_name)
-        current_project_collector_folder_list = os.listdir(current_project_folder_path)
+    def parse_vdr_project(self, path):
+        current_project_collector_folder_list = os.listdir(path)
         for collector_folder in current_project_collector_folder_list:
-            current_collector_folder_path = os.path.join(current_project_folder_path, collector_folder)
+            current_collector_folder_path = os.path.join(path, collector_folder)
             if collector_folder == 'Alkaid':
                 self.parse_alkaid_collector_data(current_collector_folder_path)
             else:
@@ -65,3 +58,25 @@ class VdrProjectModel(QAbstractItemModel):
                 if self.alkaid_collector is None:
                     self.alkaid_collector = VdrAlkaidSensorsData()
                 self.alkaid_collector.raw_data_data = alkaid_collector_raw_data_data
+
+    def parse_alkaid_collector_view(self):
+        alkaid_collector_item_list = []
+        alkaid_collector_pos_item = VdrProjectViewItem()
+        alkaid_collector_pos_item.name = 'AlkaidPosData'
+        alkaid_collector_pos_item.type = 'File'
+        alkaid_collector_item_list.append(alkaid_collector_pos_item)
+        alkaid_collector_data_item = VdrProjectViewItem()
+        alkaid_collector_data_item.name = 'AlkaidDataData'
+        alkaid_collector_data_item.type = 'File'
+        alkaid_collector_item_list.append(alkaid_collector_data_item)
+        return alkaid_collector_item_list
+
+    def parse_phone_collector_view(self):
+        alkaid_collector_item_list = []
+        for phone_collector in self.phone_collector_list:
+            alkaid_collector_pos_item = VdrProjectViewItem()
+            alkaid_collector_pos_item.name = phone_collector.phone_name
+            alkaid_collector_pos_item.type = 'File'
+            alkaid_collector_item_list.append(alkaid_collector_pos_item)
+        return alkaid_collector_item_list
+
