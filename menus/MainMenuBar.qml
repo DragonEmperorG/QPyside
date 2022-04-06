@@ -6,7 +6,13 @@ MenuBar {
      Menu {
          title: qsTr("&File")
          Action { text: qsTr("&New...") }
-         Action { text: qsTr("&Open...") }
+         Action {
+             text: qsTr("&Open...")
+             onTriggered: {
+                vdrProjectViewModelProvider.open_project()
+                projectNameValueLabel.text = vdrProjectViewModelProvider.vdr_project_name
+            }
+         }
          Action { text: qsTr("&Save") }
          Action { text: qsTr("Save &As...") }
          MenuSeparator { }
@@ -22,9 +28,6 @@ MenuBar {
         title: qsTr("R&un")
         Action {
             text: qsTr("Test")
-            onTriggered: {
-                vdrProjectViewModelProvider.open_project()
-            }
         }
     }
     Menu {

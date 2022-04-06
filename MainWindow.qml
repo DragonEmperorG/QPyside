@@ -101,7 +101,7 @@ ApplicationWindow {
 
                             Label {
                                 id: projectNameValueLabel
-                                text: qsTr("")
+                                text: vdrProjectViewModelProvider.vdr_project_name
                             }
 
                             ColumnLayout {
