@@ -72,6 +72,7 @@ class VdrAlkaidSensorsData:
         self.platform_name = 'alkaid'
         self.raw_pos_data = None
         self.raw_data_data = None
+        self.clipped_analyzer_imu_data_data = None
 
         file_list = os.listdir(path)
         for file in file_list:
@@ -101,18 +102,36 @@ class VdrAlkaidSensorsData:
 
         self.clipped_analyzer_pos_data = self.analyzer_pos_data
         self.clipped_analyzer_data_data = self.analyzer_data_data
-        self.pos_data_row_counts = self.raw_pos_data.shape[0]
-        self.start_timestamp = self.analyzer_pos_data.loc[0, VdrAlkaidSensorsData._POS_TIMESTAMP]
-        self.stop_timestamp = self.analyzer_pos_data.loc[
-            self.pos_data_row_counts - 1, VdrAlkaidSensorsData._POS_TIMESTAMP]
+
+        self.pos_data_row_counts = self.analyzer_pos_data.shape[0]
+        self.pos_data_start_timestamp = self.analyzer_pos_data.loc[0, VdrAlkaidSensorsData._POS_TIMESTAMP]
+        self.pos_data_stop_timestamp = self.analyzer_pos_data.loc[self.pos_data_row_counts - 1, VdrAlkaidSensorsData._POS_TIMESTAMP]
+
+        self.data_data_row_counts = self.analyzer_data_data.shape[0]
+        self.data_data_start_timestamp = self.analyzer_data_data.loc[0, VdrAlkaidSensorsData._DATA_POS_TIMESTAMP]
+        self.data_data_stop_timestamp = self.analyzer_data_data.loc[self.data_data_row_counts - 1, VdrAlkaidSensorsData._DATA_POS_TIMESTAMP]
 
     def clip_data(self, start_timestamp, stop_timestamp):
-        start = self.analyzer_pos_data[VdrAlkaidSensorsData._POS_TIMESTAMP] >= start_timestamp
-        stop = self.analyzer_pos_data[VdrAlkaidSensorsData._POS_TIMESTAMP] <= stop_timestamp
-        res = start == stop
-        self.clipped_analyzer_pos_data = self.analyzer_pos_data[res].copy(deep=True)
+        start_mask = self.analyzer_pos_data[VdrAlkaidSensorsData._POS_TIMESTAMP] >= start_timestamp
+        stop_mask = self.analyzer_pos_data[VdrAlkaidSensorsData._POS_TIMESTAMP] <= stop_timestamp
+        res_mask = start_mask == stop_mask
+        self.clipped_analyzer_pos_data = self.analyzer_pos_data[res_mask].copy(deep=True)
+        self.clipped_analyzer_pos_data.reset_index(drop=True, inplace=True)
+
         self.pos_data_row_counts = self.clipped_analyzer_pos_data.shape[0]
-        self.start_timestamp = self.clipped_analyzer_pos_data.loc[0, VdrAlkaidSensorsData._POS_TIMESTAMP]
-        self.stop_timestamp = self.clipped_analyzer_pos_data.loc[self.pos_data_row_counts - 1, VdrAlkaidSensorsData._POS_TIMESTAMP]
+        self.pos_data_start_timestamp = self.clipped_analyzer_pos_data.loc[0, VdrAlkaidSensorsData._POS_TIMESTAMP]
+        self.pos_data_stop_timestamp = self.clipped_analyzer_pos_data.loc[self.pos_data_row_counts - 1, VdrAlkaidSensorsData._POS_TIMESTAMP]
 
+        start_mask = self.analyzer_data_data[VdrAlkaidSensorsData._DATA_POS_TIMESTAMP] >= start_timestamp
+        stop_mask = self.analyzer_data_data[VdrAlkaidSensorsData._DATA_POS_TIMESTAMP] <= stop_timestamp
+        res_mask = start_mask == stop_mask
+        self.clipped_analyzer_data_data = self.analyzer_data_data[res_mask].copy(deep=True)
+        self.clipped_analyzer_data_data.reset_index(drop=True, inplace=True)
 
+        imu_marker_mask = self.clipped_analyzer_data_data[VdrAlkaidSensorsData._DATA_MARKER].str.contains('#IMU')
+        self.clipped_analyzer_imu_data_data = self.clipped_analyzer_data_data[imu_marker_mask].copy(deep=True)
+        self.clipped_analyzer_imu_data_data.reset_index(drop=True, inplace=True)
+
+        self.data_data_row_counts = self.clipped_analyzer_imu_data_data.shape[0]
+        self.data_data_start_timestamp = self.clipped_analyzer_imu_data_data.loc[0, VdrAlkaidSensorsData._DATA_POS_TIMESTAMP]
+        self.data_data_stop_timestamp = self.clipped_analyzer_imu_data_data.loc[self.data_data_row_counts - 1, VdrAlkaidSensorsData._DATA_POS_TIMESTAMP]

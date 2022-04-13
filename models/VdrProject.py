@@ -37,10 +37,16 @@ class VdrProject:
         alkaid_collector_pos_item = VdrProjectViewItem()
         alkaid_collector_pos_item.name = 'AlkaidPosData'
         alkaid_collector_pos_item.type = 'File'
+        alkaid_collector_pos_item.counts = self.alkaid_collector.pos_data_row_counts
+        alkaid_collector_pos_item.start_timestamp = self.alkaid_collector.pos_data_start_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
+        alkaid_collector_pos_item.stop_timestamp = self.alkaid_collector.pos_data_stop_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
         alkaid_collector_item_list.append(alkaid_collector_pos_item)
         alkaid_collector_data_item = VdrProjectViewItem()
         alkaid_collector_data_item.name = 'AlkaidDataData'
         alkaid_collector_data_item.type = 'File'
+        alkaid_collector_data_item.counts = self.alkaid_collector.data_data_row_counts
+        alkaid_collector_data_item.start_timestamp = self.alkaid_collector.data_data_start_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
+        alkaid_collector_data_item.stop_timestamp = self.alkaid_collector.data_data_stop_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
         alkaid_collector_item_list.append(alkaid_collector_data_item)
         return alkaid_collector_item_list
 
