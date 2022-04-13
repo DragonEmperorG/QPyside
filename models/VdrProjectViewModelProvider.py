@@ -64,14 +64,13 @@ class VdrProjectViewModelProvider(QObject):
         datasets_root = os.path.join(Path(__file__).resolve().parent.parent, 'datasets')
         # project_list = os.listdir(datasets_root)
 
-        current_project_folder_name = '20220315_WHUSPARK_TEST'
+        current_project_folder_name = '20220315_WHUSPARK'
         current_project_folder_path = os.path.join(datasets_root, current_project_folder_name)
 
         current_project = VdrProject(current_project_folder_path)
         self.vdrProjectName = current_project_folder_name
         self.vdrProjectAlkaidCollectorViewModel.setup_model_data(current_project.parse_alkaid_collector_view())
         self.vdrProjectPhoneCollectorViewModel.setup_model_data(current_project.parse_phone_collector_view())
-
 
 
 

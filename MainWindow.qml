@@ -126,6 +126,9 @@ ApplicationWindow {
 
                                         Text { text: name }
                                         Text { text: type }
+                                        Text { text: counts }
+                                        Text { text: start_timestamp }
+                                        Text { text: stop_timestamp }
                                     }
                                 }
 
@@ -149,6 +152,9 @@ ApplicationWindow {
 
                                             Text { text: name }
                                             Text { text: type }
+                                            Text { text: counts }
+                                            Text { text: start_timestamp }
+                                            Text { text: stop_timestamp }
                                         }
                                     }
                                 }

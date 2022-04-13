@@ -1,5 +1,4 @@
 import os
-import pandas as pd
 
 from models.VdrAlkaidSensorsData import VdrAlkaidSensorsData
 from models.VdrPhoneSensorsData import VdrPhoneSensorsData
@@ -22,42 +21,16 @@ class VdrProject:
             else:
                 self.parse_phone_collector_data(current_collector_folder_path)
 
+        self.clip_collector_data()
+
     def parse_phone_collector_data(self, path):
         file_list = os.listdir(path)
         file_path = os.path.join(path, file_list[0], 'VdrExperimentData.csv')
-        phone_collector_raw_data = pd.read_csv(
-            file_path,
-            header=None
-        )
-        phone_collector = VdrPhoneSensorsData()
-        phone_collector.phone_name = os.path.basename(path)
-        phone_collector.raw_csv_data = phone_collector_raw_data
+        phone_collector = VdrPhoneSensorsData(os.path.basename(path), file_path)
         self.phone_collector_list.append(phone_collector)
 
     def parse_alkaid_collector_data(self, path):
-        file_list = os.listdir(path)
-        for file in file_list:
-            name, suffix = os.path.splitext(file)
-            file_path = os.path.join(path, file)
-            if suffix == '.pos':
-                alkaid_collector_raw_pos_data = pd.read_csv(
-                    file_path,
-                    delim_whitespace=True
-                )
-                alkaid_collector_raw_pos_data.rename(
-                    columns={"#timestamp": "timestamp"}
-                )
-                if self.alkaid_collector is None:
-                    self.alkaid_collector = VdrAlkaidSensorsData()
-                self.alkaid_collector.raw_pos_data = alkaid_collector_raw_pos_data
-            if suffix == '.data':
-                alkaid_collector_raw_data_data = pd.read_csv(
-                    file_path,
-                    header=None
-                )
-                if self.alkaid_collector is None:
-                    self.alkaid_collector = VdrAlkaidSensorsData()
-                self.alkaid_collector.raw_data_data = alkaid_collector_raw_data_data
+        self.alkaid_collector = VdrAlkaidSensorsData(path)
 
     def parse_alkaid_collector_view(self):
         alkaid_collector_item_list = []
@@ -77,6 +50,28 @@ class VdrProject:
             alkaid_collector_pos_item = VdrProjectViewItem()
             alkaid_collector_pos_item.name = phone_collector.phone_name
             alkaid_collector_pos_item.type = 'File'
+            alkaid_collector_pos_item.counts = phone_collector.row_counts
+            alkaid_collector_pos_item.start_timestamp = phone_collector.start_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
+            alkaid_collector_pos_item.stop_timestamp = phone_collector.stop_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
             alkaid_collector_item_list.append(alkaid_collector_pos_item)
         return alkaid_collector_item_list
 
+    def clip_collector_data(self):
+        phone_collector_start_timestamp_list = []
+        phone_collector_stop_timestamp_list = []
+        for phone_collector in self.phone_collector_list:
+            phone_collector_start_timestamp_list.append(phone_collector.start_timestamp)
+            phone_collector_stop_timestamp_list.append(phone_collector.stop_timestamp)
+
+        phone_collector_intersection_start_timestamp = max(phone_collector_start_timestamp_list)
+        phone_collector_intersection_stop_timestamp = min(phone_collector_stop_timestamp_list)
+
+        for phone_collector in self.phone_collector_list:
+            phone_collector.clip_data(
+                phone_collector_intersection_start_timestamp,
+                phone_collector_intersection_stop_timestamp
+            )
+        self.alkaid_collector.clip_data(
+                phone_collector_intersection_start_timestamp,
+                phone_collector_intersection_stop_timestamp
+            )
