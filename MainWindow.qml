@@ -172,7 +172,7 @@ ApplicationWindow {
             Map {
                 id: map
                 anchors.fill: parent
-                plugin: myPlugin;
+                plugin: vdrOsmPlugin;
                 center {
                     latitude: 59.9485
                     longitude: 10.7686
@@ -184,8 +184,9 @@ ApplicationWindow {
     }
 
     Plugin {
-        id: myPlugin
+        id: vdrOsmPlugin
         name: "osm"
+        PluginParameter { name: "osm.mapping.providersrepository.disabled"; value: "True" }
     }
 
 }
