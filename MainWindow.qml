@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtLocation 5.15
 import QtPositioning 5.15
+import QtQuick.Window 2.15
 
 import "menus"
 import "models"
@@ -16,6 +17,7 @@ ApplicationWindow {
     width: 800
     height: 600
     visible: true
+    visibility: Window.Maximized
 
     property int singleMargin: 16
 
@@ -172,12 +174,22 @@ ApplicationWindow {
             Map {
                 id: map
                 anchors.fill: parent
-                plugin: vdrOsmPlugin;
+                plugin: vdrOsmPlugin
+
                 center {
-                    latitude: 59.9485
-                    longitude: 10.7686
+                    longitude: 114.4038712
+                    latitude: 30.4554388
                 }
-                zoomLevel: 13
+                zoomLevel: 22
+
+                MapItemView {
+                    model: vdrProjectViewModelProvider.map_view_polyline_model
+                    delegate: MapPolyline {
+                        line.width: 3
+                        line.color: 'red'
+                        path: polylineData
+                    }
+                }
             }
         }
 
@@ -186,7 +198,16 @@ ApplicationWindow {
     Plugin {
         id: vdrOsmPlugin
         name: "osm"
-        PluginParameter { name: "osm.mapping.providersrepository.disabled"; value: "True" }
+
+        PluginParameter {
+            name: "osm.mapping.highdpi_tiles";
+            value: "True"
+        }
+        PluginParameter {
+            name: "osm.mapping.providersrepository.disabled";
+            value: "True"
+        }
     }
 
 }
+

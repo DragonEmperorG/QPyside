@@ -1,13 +1,4 @@
-import os
-
-from pathlib import Path
-
-from PySide2.QtCore import Slot, QAbstractListModel, Qt, QModelIndex, QObject, QByteArray
-
-from models.VdrAlkaidSensorsData import VdrAlkaidSensorsData
-from models.VdrPhoneSensorsData import VdrPhoneSensorsData
-from models.VdrProject import VdrProject
-from models.VdrProjectViewItem import VdrProjectViewItem
+from PySide2.QtCore import QAbstractListModel, Qt, QModelIndex, QByteArray
 
 
 class VdrProjectCollectorViewModel(QAbstractListModel):

@@ -1,16 +1,13 @@
 import os
-
 from pathlib import Path
+from PySide2.QtCore import Slot, Property, QObject, Signal
+from PySide2.QtLocation import QGeoRoute
+from PySide2.QtPositioning import QGeoPath, QGeoCoordinate
 
-from PySide2 import QtCore
-from PySide2.QtCore import Slot, Property, QAbstractListModel, Qt, QModelIndex, QObject, Signal
-from PySide2.QtWidgets import QLabel
-
-from models.VdrAlkaidSensorsData import VdrAlkaidSensorsData
-from models.VdrPhoneSensorsData import VdrPhoneSensorsData
 from models.VdrProject import VdrProject
 from models.VdrProjectCollectorViewModel import VdrProjectCollectorViewModel
-from models.VdrProjectViewItem import VdrProjectViewItem
+from models.VdrProjectMapViewPolylineItem import VdrProjectMapViewPolylineItem
+from models.VdrProjectMapViewPolylineModel import VdrProjectMapViewPolylineModel
 
 
 class VdrProjectViewModelProvider(QObject):
@@ -19,6 +16,7 @@ class VdrProjectViewModelProvider(QObject):
         self.vdrProjectName = ''
         self.vdrProjectAlkaidCollectorViewModel = VdrProjectCollectorViewModel()
         self.vdrProjectPhoneCollectorViewModel = VdrProjectCollectorViewModel()
+        self.vdrProjectMapViewPolylineModel = VdrProjectMapViewPolylineModel()
 
     def _vdr_project_name(self):
         return self.vdrProjectName
@@ -59,6 +57,19 @@ class VdrProjectViewModelProvider(QObject):
         notify=phone_collector_view_model_changed
     )
 
+    def _map_view_polyline_model(self):
+        return self.vdrProjectMapViewPolylineModel
+
+    @Signal
+    def map_view_polyline_model_changed(self):
+        pass
+
+    map_view_polyline_model = Property(
+        QObject,
+        _map_view_polyline_model,
+        notify=map_view_polyline_model_changed
+    )
+
     @Slot()
     def open_project(self):
         datasets_root = os.path.join(Path(__file__).resolve().parent.parent, 'datasets')
@@ -71,9 +82,4 @@ class VdrProjectViewModelProvider(QObject):
         self.vdrProjectName = current_project_folder_name
         self.vdrProjectAlkaidCollectorViewModel.setup_model_data(current_project.parse_alkaid_collector_view())
         self.vdrProjectPhoneCollectorViewModel.setup_model_data(current_project.parse_phone_collector_view())
-
-
-
-
-
-
+        self.vdrProjectMapViewPolylineModel.setup_model_data(current_project.parse_map_view_polyline())

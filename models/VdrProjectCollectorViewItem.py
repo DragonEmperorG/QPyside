@@ -1,4 +1,4 @@
-class VdrProjectViewItem:
+class VdrProjectCollectorViewItem:
     def __init__(self):
         self.name = ''
         self.type = ''

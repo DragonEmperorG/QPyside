@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from PySide2.QtPositioning import QGeoCoordinate
 
 from utils.VdrFileUtils import unix_s_timestamp_parser
 
@@ -73,6 +74,7 @@ class VdrAlkaidSensorsData:
         self.raw_pos_data = None
         self.raw_data_data = None
         self.clipped_analyzer_imu_data_data = None
+        self.polyline_path = None
 
         file_list = os.listdir(path)
         for file in file_list:
@@ -121,6 +123,12 @@ class VdrAlkaidSensorsData:
         self.pos_data_row_counts = self.clipped_analyzer_pos_data.shape[0]
         self.pos_data_start_timestamp = self.clipped_analyzer_pos_data.loc[0, VdrAlkaidSensorsData._POS_TIMESTAMP]
         self.pos_data_stop_timestamp = self.clipped_analyzer_pos_data.loc[self.pos_data_row_counts - 1, VdrAlkaidSensorsData._POS_TIMESTAMP]
+
+        clipped_analyzer_pos_data_coordinate_series = self.clipped_analyzer_pos_data.apply(
+            lambda row: QGeoCoordinate(row.POS_LATITUDE, row.POS_LONGITUDE),
+            axis=1
+        )
+        self.polyline_path = clipped_analyzer_pos_data_coordinate_series.tolist()
 
         start_mask = self.analyzer_data_data[VdrAlkaidSensorsData._DATA_POS_TIMESTAMP] >= start_timestamp
         stop_mask = self.analyzer_data_data[VdrAlkaidSensorsData._DATA_POS_TIMESTAMP] <= stop_timestamp

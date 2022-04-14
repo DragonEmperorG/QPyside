@@ -2,7 +2,8 @@ import os
 
 from models.VdrAlkaidSensorsData import VdrAlkaidSensorsData
 from models.VdrPhoneSensorsData import VdrPhoneSensorsData
-from models.VdrProjectViewItem import VdrProjectViewItem
+from models.VdrProjectCollectorViewItem import VdrProjectCollectorViewItem
+from models.VdrProjectMapViewPolylineItem import VdrProjectMapViewPolylineItem
 
 
 class VdrProject:
@@ -34,14 +35,14 @@ class VdrProject:
 
     def parse_alkaid_collector_view(self):
         alkaid_collector_item_list = []
-        alkaid_collector_pos_item = VdrProjectViewItem()
+        alkaid_collector_pos_item = VdrProjectCollectorViewItem()
         alkaid_collector_pos_item.name = 'AlkaidPosData'
         alkaid_collector_pos_item.type = 'File'
         alkaid_collector_pos_item.counts = self.alkaid_collector.pos_data_row_counts
         alkaid_collector_pos_item.start_timestamp = self.alkaid_collector.pos_data_start_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
         alkaid_collector_pos_item.stop_timestamp = self.alkaid_collector.pos_data_stop_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
         alkaid_collector_item_list.append(alkaid_collector_pos_item)
-        alkaid_collector_data_item = VdrProjectViewItem()
+        alkaid_collector_data_item = VdrProjectCollectorViewItem()
         alkaid_collector_data_item.name = 'AlkaidDataData'
         alkaid_collector_data_item.type = 'File'
         alkaid_collector_data_item.counts = self.alkaid_collector.data_data_row_counts
@@ -53,7 +54,7 @@ class VdrProject:
     def parse_phone_collector_view(self):
         alkaid_collector_item_list = []
         for phone_collector in self.phone_collector_list:
-            alkaid_collector_pos_item = VdrProjectViewItem()
+            alkaid_collector_pos_item = VdrProjectCollectorViewItem()
             alkaid_collector_pos_item.name = phone_collector.phone_name
             alkaid_collector_pos_item.type = 'File'
             alkaid_collector_pos_item.counts = phone_collector.row_counts
@@ -61,6 +62,15 @@ class VdrProject:
             alkaid_collector_pos_item.stop_timestamp = phone_collector.stop_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
             alkaid_collector_item_list.append(alkaid_collector_pos_item)
         return alkaid_collector_item_list
+
+    def parse_map_view_polyline(self):
+        map_view_polyline_item_list = []
+
+        alkaid_collector_polyline_item = VdrProjectMapViewPolylineItem()
+        alkaid_collector_polyline_item.polylineData = self.alkaid_collector.polyline_path
+        map_view_polyline_item_list.append(alkaid_collector_polyline_item)
+
+        return map_view_polyline_item_list
 
     def clip_collector_data(self):
         phone_collector_start_timestamp_list = []
