@@ -1,15 +1,13 @@
 import os
 from pathlib import Path
 from PySide2.QtCore import Slot, Property, QObject, Signal
-from PySide2.QtLocation import QGeoRoute
-from PySide2.QtPositioning import QGeoPath, QGeoCoordinate
 
 from models.VdrProject import VdrProject
 from models.VdrProjectCollectorViewModel import VdrProjectCollectorViewModel
-from models.VdrProjectMapViewPolylineItem import VdrProjectMapViewPolylineItem
 from models.VdrProjectMapViewPolylineModel import VdrProjectMapViewPolylineModel
 
 
+# https://stackoverflow.com/questions/54687953/declaring-a-qabstractlistmodel-as-a-property-in-pyside2
 class VdrProjectViewModelProvider(QObject):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -83,3 +81,7 @@ class VdrProjectViewModelProvider(QObject):
         self.vdrProjectAlkaidCollectorViewModel.setup_model_data(current_project.parse_alkaid_collector_view())
         self.vdrProjectPhoneCollectorViewModel.setup_model_data(current_project.parse_phone_collector_view())
         self.vdrProjectMapViewPolylineModel.setup_model_data(current_project.parse_map_view_polyline())
+
+    @Slot(int, bool)
+    def polyline_switch(self, index: int, value: bool):
+        print('polyline_switch:' + ' ' + str(index) + ' ' + str(value))

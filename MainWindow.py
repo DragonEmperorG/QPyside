@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 import sys
 
-from PySide2.QtCore import QByteArray
 from PySide2.QtGui import QGuiApplication
 from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PySide2.QtQuickControls2 import QQuickStyle

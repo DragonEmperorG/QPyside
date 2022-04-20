@@ -1,4 +1,5 @@
 import pandas as pd
+from PySide2.QtPositioning import QGeoCoordinate
 
 from utils.VdrFileUtils import unix_ms_timestamp_parser, alkaid_timestamp_parser
 
@@ -103,6 +104,8 @@ class VdrPhoneSensorsData:
     ]
 
     def __init__(self, phone_name, path):
+        self.polyline_path = None
+
         phone_collector_raw_data = pd.read_csv(
             path,
             names=VdrPhoneSensorsData._VDR_PHONE_SENORS_DATA_NAMES_LIST
@@ -133,3 +136,9 @@ class VdrPhoneSensorsData:
         self.row_counts = self.clipped_analyzer_data.shape[0]
         self.start_timestamp = self.clipped_analyzer_data.loc[0, VdrPhoneSensorsData._ALKAID_TIME]
         self.stop_timestamp = self.clipped_analyzer_data.loc[self.row_counts - 1, VdrPhoneSensorsData._ALKAID_TIME]
+
+        clipped_analyzer_data_coordinate_series = self.clipped_analyzer_data.apply(
+            lambda row: QGeoCoordinate(row.ALKAID_LATITUDE, row.ALKAID_LONGITUDE),
+            axis=1
+        )
+        self.polyline_path = clipped_analyzer_data_coordinate_series.tolist()

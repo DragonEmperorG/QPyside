@@ -119,18 +119,31 @@ ApplicationWindow {
                                 ListView {
                                     id: vdrProjectAlkaidCollectorListView
                                     Layout.fillHeight: true
-                                    Layout.minimumHeight: 32
+                                    Layout.minimumHeight: 96
                                     Layout.leftMargin: singleMargin
                                     spacing: 8
+                                    onCurrentIndexChanged: {
+                                        debugIndex.text = vdrProjectAlkaidCollectorListView.currentIndex
+                                    }
                                     model: vdrProjectViewModelProvider.alkaid_collector_view_model
                                     delegate: Row {
                                         spacing: 16
 
+                                        // https://stackoverflow.com/questions/50178597/how-to-add-a-custom-role-to-qfilesystemmodel/50180682#50180682
+                                        CheckBox {
+                                            text: item_index
+                                            checked: alkaid_polyline_enable
+                                            onCheckedChanged: {
+                                                // vdrProjectViewModelProvider.alkaid_collector_view_model.setData(model.get(index), checked, 10)
+                                                vdrProjectViewModelProvider.polyline_switch(index, checked)
+                                            }
+                                        }
                                         Text { text: name }
                                         Text { text: type }
                                         Text { text: counts }
                                         Text { text: start_timestamp }
                                         Text { text: stop_timestamp }
+
                                     }
                                 }
 
@@ -180,7 +193,7 @@ ApplicationWindow {
                     longitude: 114.4038712
                     latitude: 30.4554388
                 }
-                zoomLevel: 22
+                zoomLevel: 19
 
                 MapItemView {
                     model: vdrProjectViewModelProvider.map_view_polyline_model
@@ -188,6 +201,34 @@ ApplicationWindow {
                         line.width: 3
                         line.color: 'red'
                         path: polylineData
+                    }
+                }
+
+                GroupBox {
+                    title: "Map Properties"
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+
+                    GridLayout {
+                        columns: 2
+
+                        Label { text: "plugin: " } Text { text: map.plugin.name}
+                        Label { text: "activeMapType: " } Text { text: map.activeMapType.name}
+                        Label { text: "maximumZoomLevel: " } Text { text: map.maximumZoomLevel}
+                        Label { text: "minimumZoomLevel: " } Text { text: map.minimumZoomLevel}
+                        Label { text: "zoomLevel : " } Text { text: map.zoomLevel }
+                    }
+                }
+
+                GroupBox {
+                    title: "Debug"
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+
+                    GridLayout {
+                        columns: 2
+
+                        Label { text: "index: " } Text { id: debugIndex; text: 'vdrProjectAlkaidCollectorListView.currentIndex'}
                     }
                 }
             }

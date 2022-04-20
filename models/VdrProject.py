@@ -49,6 +49,9 @@ class VdrProject:
         alkaid_collector_data_item.start_timestamp = self.alkaid_collector.data_data_start_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
         alkaid_collector_data_item.stop_timestamp = self.alkaid_collector.data_data_stop_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
         alkaid_collector_item_list.append(alkaid_collector_data_item)
+
+        for index, alkaid_collector_item in enumerate(alkaid_collector_item_list):
+            alkaid_collector_item.item_index = index
         return alkaid_collector_item_list
 
     def parse_phone_collector_view(self):
@@ -69,6 +72,11 @@ class VdrProject:
         alkaid_collector_polyline_item = VdrProjectMapViewPolylineItem()
         alkaid_collector_polyline_item.polylineData = self.alkaid_collector.polyline_path
         map_view_polyline_item_list.append(alkaid_collector_polyline_item)
+
+        for phone_collector in self.phone_collector_list:
+            phone_collector_polyline_item = VdrProjectMapViewPolylineItem()
+            phone_collector_polyline_item.polylineData = phone_collector.polyline_path
+            map_view_polyline_item_list.append(phone_collector_polyline_item)
 
         return map_view_polyline_item_list
 
