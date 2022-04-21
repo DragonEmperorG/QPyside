@@ -7,4 +7,5 @@ class VdrProjectCollectorViewItem:
         self.start_timestamp = ''
         self.stop_timestamp = ''
         self.alkaid_polyline_enable = False
+        self.gnss_polyline_enable = False
         self.data = None

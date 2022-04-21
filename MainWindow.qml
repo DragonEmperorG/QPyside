@@ -131,10 +131,10 @@ ApplicationWindow {
 
                                         // https://stackoverflow.com/questions/50178597/how-to-add-a-custom-role-to-qfilesystemmodel/50180682#50180682
                                         CheckBox {
-                                            text: item_index
+                                            text: qsTr("Alkaid")
                                             checked: alkaid_polyline_enable
                                             onCheckedChanged: {
-                                                vdrProjectViewModelProvider.switch_map_polyline(0, index, checked)
+                                                vdrProjectViewModelProvider.switch_map_polyline(0, index, 0, checked)
                                             }
                                         }
                                         Text { text: name }
@@ -165,10 +165,18 @@ ApplicationWindow {
                                             spacing: 16
 
                                             CheckBox {
-                                                text: item_index
+                                                text: qsTr("Alkaid")
                                                 checked: alkaid_polyline_enable
                                                 onCheckedChanged: {
-                                                    vdrProjectViewModelProvider.switch_map_polyline(1, index, checked)
+                                                    vdrProjectViewModelProvider.switch_map_polyline(1, index, 0, checked)
+                                                }
+                                            }
+
+                                            CheckBox {
+                                                text: qsTr("GNSS")
+                                                checked: gnss_polyline_enable
+                                                onCheckedChanged: {
+                                                    vdrProjectViewModelProvider.switch_map_polyline(1, index, 1, checked)
                                                 }
                                             }
 

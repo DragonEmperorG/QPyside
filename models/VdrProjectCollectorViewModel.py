@@ -9,6 +9,7 @@ class VdrProjectCollectorViewModel(QAbstractListModel):
     StartTimestampRole = Qt.UserRole + 5
     StopTimestampRole = Qt.UserRole + 6
     AlkaidPolylineEnableRole = Qt.UserRole + 7
+    GnssPolylineEnableRole = Qt.UserRole + 8
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -26,6 +27,7 @@ class VdrProjectCollectorViewModel(QAbstractListModel):
         default[self.StartTimestampRole] = QByteArray(b"start_timestamp")
         default[self.StopTimestampRole] = QByteArray(b"stop_timestamp")
         default[self.AlkaidPolylineEnableRole] = QByteArray(b"alkaid_polyline_enable")
+        default[self.GnssPolylineEnableRole] = QByteArray(b"gnss_polyline_enable")
         return default
 
     def data(self, index, role):
@@ -55,6 +57,11 @@ class VdrProjectCollectorViewModel(QAbstractListModel):
                 return Qt.Checked
             else:
                 return Qt.Unchecked
+        elif role == self.GnssPolylineEnableRole:
+            if vdrProjectViewItem.gnss_polyline_enable:
+                return Qt.Checked
+            else:
+                return Qt.Unchecked
         else:
             ret = None
         return ret
@@ -67,13 +74,20 @@ class VdrProjectCollectorViewModel(QAbstractListModel):
     def clear_model_data(self):
         self.vdrProjectViewItemList = []
 
-    def update_map_polyline(self, index, value):
+    def update_map_polyline(self, index, type, value):
         if index < len(self.vdrProjectViewItemList):
-            last = self.vdrProjectViewItemList[index].alkaid_polyline_enable
-            if last != value:
-                self.vdrProjectViewItemList[index].alkaid_polyline_enable = value
-                model_item_index = self.index(index, 0)
-                self.dataChanged.emit(model_item_index, model_item_index, self.roleNames())
+            if type == 0:
+                last = self.vdrProjectViewItemList[index].alkaid_polyline_enable
+                if last != value:
+                    self.vdrProjectViewItemList[index].alkaid_polyline_enable = value
+                    model_item_index = self.index(index, 0)
+                    self.dataChanged.emit(model_item_index, model_item_index, self.roleNames())
+            elif type == 1:
+                last = self.vdrProjectViewItemList[index].gnss_polyline_enable
+                if last != value:
+                    self.vdrProjectViewItemList[index].gnss_polyline_enable = value
+                    model_item_index = self.index(index, 0)
+                    self.dataChanged.emit(model_item_index, model_item_index, self.roleNames())
 
 
 

@@ -104,7 +104,8 @@ class VdrPhoneSensorsData:
     ]
 
     def __init__(self, phone_name, path):
-        self.polyline_path = None
+        self.alkaid_polyline_path = None
+        self.gnss_polyline_path = None
 
         phone_collector_raw_data = pd.read_csv(
             path,
@@ -137,8 +138,14 @@ class VdrPhoneSensorsData:
         self.start_timestamp = self.clipped_analyzer_data.loc[0, VdrPhoneSensorsData._ALKAID_TIME]
         self.stop_timestamp = self.clipped_analyzer_data.loc[self.row_counts - 1, VdrPhoneSensorsData._ALKAID_TIME]
 
-        clipped_analyzer_data_coordinate_series = self.clipped_analyzer_data.apply(
+        clipped_analyzer_alkaid_data_coordinate_series = self.clipped_analyzer_data.apply(
             lambda row: QGeoCoordinate(row.ALKAID_LATITUDE, row.ALKAID_LONGITUDE),
             axis=1
         )
-        self.polyline_path = clipped_analyzer_data_coordinate_series.tolist()
+        self.alkaid_polyline_path = clipped_analyzer_alkaid_data_coordinate_series.tolist()
+
+        clipped_analyzer_gnss_data_coordinate_series = self.clipped_analyzer_data.apply(
+            lambda row: QGeoCoordinate(row.GNSS_LATITUDE, row.GNSS_LONGITUDE),
+            axis=1
+        )
+        self.gnss_polyline_path = clipped_analyzer_gnss_data_coordinate_series.tolist()

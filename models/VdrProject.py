@@ -78,10 +78,14 @@ class VdrProject:
         map_view_polyline_item_list.append(alkaid_collector_polyline_item)
 
         for phone_collector in self.phone_collector_list:
-            phone_collector_polyline_item = VdrProjectMapViewPolylineItem()
-            phone_collector_polyline_item.polyline_enable = False
-            phone_collector_polyline_item.polyline_data = phone_collector.polyline_path
-            map_view_polyline_item_list.append(phone_collector_polyline_item)
+            phone_collector_alkaid_polyline_item = VdrProjectMapViewPolylineItem()
+            phone_collector_alkaid_polyline_item.polyline_enable = False
+            phone_collector_alkaid_polyline_item.polyline_data = phone_collector.alkaid_polyline_path
+            map_view_polyline_item_list.append(phone_collector_alkaid_polyline_item)
+            phone_collector_gnss_polyline_item = VdrProjectMapViewPolylineItem()
+            phone_collector_gnss_polyline_item.polyline_enable = False
+            phone_collector_gnss_polyline_item.polyline_data = phone_collector.gnss_polyline_path
+            map_view_polyline_item_list.append(phone_collector_gnss_polyline_item)
 
         return map_view_polyline_item_list
 

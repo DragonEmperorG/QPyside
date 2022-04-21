@@ -82,13 +82,13 @@ class VdrProjectViewModelProvider(QObject):
         self.vdrProjectPhoneCollectorViewModel.setup_model_data(current_project.parse_phone_collector_view())
         self.vdrProjectMapViewPolylineModel.setup_model_data(current_project.parse_map_view_polyline())
 
-    @Slot(int, int, bool)
-    def switch_map_polyline(self, collector_index: int, item_index: int, value: bool):
-        print('switch_map_polyline:' + ' ' + str(collector_index) + ' ' + str(item_index) + ' ' + str(value))
+    @Slot(int, int, int, bool)
+    def switch_map_polyline(self, collector_index: int, item_index: int, type: int, value: bool):
+        print('switch_map_polyline:' + ' ' + str(collector_index) + ' ' + str(item_index) + ' ' + str(type) + ' ' + str(value))
         if collector_index == 0:
             if item_index == 0:
-                self.vdrProjectAlkaidCollectorViewModel.update_map_polyline(item_index, value)
+                self.vdrProjectAlkaidCollectorViewModel.update_map_polyline(item_index, type, value)
                 self.vdrProjectMapViewPolylineModel.update_map_polyline(item_index, value)
         elif collector_index == 1:
-            self.vdrProjectPhoneCollectorViewModel.update_map_polyline(item_index, value)
-            self.vdrProjectMapViewPolylineModel.update_map_polyline(1 + item_index, value)
+            self.vdrProjectPhoneCollectorViewModel.update_map_polyline(item_index, type, value)
+            self.vdrProjectMapViewPolylineModel.update_map_polyline(1 + item_index*2+type, value)
