@@ -55,12 +55,6 @@ class VdrProjectCollectorViewModel(QAbstractListModel):
                 return Qt.Checked
             else:
                 return Qt.Unchecked
-        elif role == Qt.CheckStateRole:
-            # https://stackoverflow.com/questions/63623566/pyqt-qlistview-checkbox-click-toggle
-            if vdrProjectViewItem.alkaid_polyline_enable:
-                return Qt.Checked
-            else:
-                return Qt.Unchecked
         else:
             ret = None
         return ret
@@ -73,26 +67,13 @@ class VdrProjectCollectorViewModel(QAbstractListModel):
     def clear_model_data(self):
         self.vdrProjectViewItemList = []
 
-    # https://doc.qt.io/qtforpython/overviews/model-view-programming.html?highlight=model
-    # def flags(self, index):
-    #     if not index.isValid():
-    #         return None
-    #     return Qt.ItemIsEnabled | Qt.ItemIsEditable | Qt.ItemIsSelectable | Qt.ItemIsUserCheckable
+    def update_map_polyline(self, index, value):
+        if index < len(self.vdrProjectViewItemList):
+            last = self.vdrProjectViewItemList[index].alkaid_polyline_enable
+            if last != value:
+                self.vdrProjectViewItemList[index].alkaid_polyline_enable = value
+                model_item_index = self.index(index, 0)
+                self.dataChanged.emit(model_item_index, model_item_index, self.roleNames())
 
-    def setData(self, index, value, role):
-        if index.isValid():
-            row = index
-            if role == Qt.CheckStateRole:
-                vdrProjectViewItem = self.vdrProjectViewItemList[index.row()]
-                vdrProjectViewItem.alkaid_polyline_enable = bool(value)
-                self.dataChanged.emit(index, index, (role,))
-                print('setData CheckStateRole' + ' ' + str(row) + ' ' + str(value))
-                return True
-            if role == self.AlkaidPolylineEnableRole:
-                vdrProjectViewItem = self.vdrProjectViewItemList[index.row()]
-                vdrProjectViewItem.alkaid_polyline_enable = bool(value)
-                self.dataChanged.emit(index, index, (role,))
-                print('setData AlkaidPolylineEnableRole' + ' ' + str(row) + ' ' + str(value))
-                return True
-        print('setData' + ' ' + str(index) + ' ' + str(value) + ' ' + str(role))
-        return False
+
+

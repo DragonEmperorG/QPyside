@@ -41,6 +41,7 @@ class VdrProject:
         alkaid_collector_pos_item.counts = self.alkaid_collector.pos_data_row_counts
         alkaid_collector_pos_item.start_timestamp = self.alkaid_collector.pos_data_start_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
         alkaid_collector_pos_item.stop_timestamp = self.alkaid_collector.pos_data_stop_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
+        alkaid_collector_pos_item.alkaid_polyline_enable = True
         alkaid_collector_item_list.append(alkaid_collector_pos_item)
         alkaid_collector_data_item = VdrProjectCollectorViewItem()
         alkaid_collector_data_item.name = 'AlkaidDataData'
@@ -48,6 +49,7 @@ class VdrProject:
         alkaid_collector_data_item.counts = self.alkaid_collector.data_data_row_counts
         alkaid_collector_data_item.start_timestamp = self.alkaid_collector.data_data_start_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
         alkaid_collector_data_item.stop_timestamp = self.alkaid_collector.data_data_stop_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
+        alkaid_collector_data_item.alkaid_polyline_enable = False
         alkaid_collector_item_list.append(alkaid_collector_data_item)
 
         for index, alkaid_collector_item in enumerate(alkaid_collector_item_list):
@@ -63,6 +65,7 @@ class VdrProject:
             alkaid_collector_pos_item.counts = phone_collector.row_counts
             alkaid_collector_pos_item.start_timestamp = phone_collector.start_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
             alkaid_collector_pos_item.stop_timestamp = phone_collector.stop_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
+            alkaid_collector_pos_item.alkaid_polyline_enable = False
             alkaid_collector_item_list.append(alkaid_collector_pos_item)
         return alkaid_collector_item_list
 
@@ -70,12 +73,14 @@ class VdrProject:
         map_view_polyline_item_list = []
 
         alkaid_collector_polyline_item = VdrProjectMapViewPolylineItem()
-        alkaid_collector_polyline_item.polylineData = self.alkaid_collector.polyline_path
+        alkaid_collector_polyline_item.polyline_enable = True
+        alkaid_collector_polyline_item.polyline_data = self.alkaid_collector.polyline_path
         map_view_polyline_item_list.append(alkaid_collector_polyline_item)
 
         for phone_collector in self.phone_collector_list:
             phone_collector_polyline_item = VdrProjectMapViewPolylineItem()
-            phone_collector_polyline_item.polylineData = phone_collector.polyline_path
+            phone_collector_polyline_item.polyline_enable = False
+            phone_collector_polyline_item.polyline_data = phone_collector.polyline_path
             map_view_polyline_item_list.append(phone_collector_polyline_item)
 
         return map_view_polyline_item_list

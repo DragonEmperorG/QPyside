@@ -1,3 +1,4 @@
 class VdrProjectMapViewPolylineItem:
     def __init__(self):
-        self.polylineData = None
+        self.polyline_enable = False
+        self.polyline_data = None

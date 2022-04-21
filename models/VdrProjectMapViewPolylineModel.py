@@ -11,6 +11,9 @@ class VdrProjectMapViewPolylineModel(QAbstractListModel):
     def rowCount(self, parent=QModelIndex(), **kwargs):
         return len(self.vdrProjectMapViewPolylineItemList)
 
+    def is_valid_row(self, row):
+        return row < len(self.vdrProjectMapViewPolylineItemList)
+
     def roleNames(self):
         default = super().roleNames()
         default[self.PolylineDataRole] = QByteArray(b"polylineData")
@@ -22,7 +25,10 @@ class VdrProjectMapViewPolylineModel(QAbstractListModel):
         elif not index.isValid():
             ret = None
         elif role == self.PolylineDataRole:
-            ret = self.vdrProjectMapViewPolylineItemList[index.row()].polylineData
+            if self.vdrProjectMapViewPolylineItemList[index.row()].polyline_enable:
+                ret = self.vdrProjectMapViewPolylineItemList[index.row()].polyline_data
+            else:
+                ret = None
         else:
             ret = None
         return ret
@@ -34,3 +40,11 @@ class VdrProjectMapViewPolylineModel(QAbstractListModel):
 
     def clear_model_data(self):
         self.vdrProjectMapViewPolylineItemList = []
+
+    def update_map_polyline(self, index, value):
+        if self.is_valid_row(index):
+            vdr_project_map_view_polyline_item = self.vdrProjectMapViewPolylineItemList[index]
+            last = vdr_project_map_view_polyline_item.polyline_enable
+            if last != value:
+                vdr_project_map_view_polyline_item.polyline_enable = value
+                self.layoutChanged.emit()

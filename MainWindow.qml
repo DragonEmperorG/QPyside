@@ -134,8 +134,7 @@ ApplicationWindow {
                                             text: item_index
                                             checked: alkaid_polyline_enable
                                             onCheckedChanged: {
-                                                // vdrProjectViewModelProvider.alkaid_collector_view_model.setData(model.get(index), checked, 10)
-                                                vdrProjectViewModelProvider.polyline_switch(index, checked)
+                                                vdrProjectViewModelProvider.switch_map_polyline(0, index, checked)
                                             }
                                         }
                                         Text { text: name }
@@ -153,7 +152,7 @@ ApplicationWindow {
                                 }
 
                                 ColumnLayout {
-                                    Layout.minimumHeight: 48
+                                    Layout.minimumHeight: 144
                                     Layout.leftMargin: singleMargin
                                     Layout.fillHeight: true
 
@@ -164,6 +163,14 @@ ApplicationWindow {
                                         model: vdrProjectViewModelProvider.phone_collector_view_model
                                         delegate: Row {
                                             spacing: 16
+
+                                            CheckBox {
+                                                text: item_index
+                                                checked: alkaid_polyline_enable
+                                                onCheckedChanged: {
+                                                    vdrProjectViewModelProvider.switch_map_polyline(1, index, checked)
+                                                }
+                                            }
 
                                             Text { text: name }
                                             Text { text: type }
