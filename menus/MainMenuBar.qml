@@ -10,7 +10,16 @@ MenuBar {
              text: qsTr("&Open...")
              onTriggered: {
                 vdrProjectViewModelProvider.open_project()
-                projectNameValueLabel.text = vdrProjectViewModelProvider.vdr_project_name
+                projectNameValueId.text = vdrProjectViewModelProvider.vdr_project_name
+                vdrProjectAlkaidCollectorListView.forceLayout()
+                // projectColumnLayout.visible = vdrProjectViewModelProvider.vdr_project_open_state
+
+                projectScrollViewWidth.text = projectScrollView.width
+                projectScrollViewHeight.text = projectScrollView.height
+                // projectColumnLayoutWidth.text = projectColumnLayout.width
+                // projectColumnLayoutHeight.text = projectColumnLayout.height
+                // vdrProjectAlkaidCollectorListViewWidth.text = vdrProjectAlkaidCollectorListView.width
+                vdrProjectAlkaidCollectorListViewHeight.text = vdrProjectAlkaidCollectorListView.height
             }
          }
          Action { text: qsTr("&Save") }
@@ -28,6 +37,9 @@ MenuBar {
         title: qsTr("R&un")
         Action {
             text: qsTr("Test")
+            onTriggered: {
+                projectNameValueId.text = '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789'
+            }
         }
     }
     Menu {

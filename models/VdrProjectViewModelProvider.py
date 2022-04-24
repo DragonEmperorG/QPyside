@@ -11,10 +11,24 @@ from models.VdrProjectMapViewPolylineModel import VdrProjectMapViewPolylineModel
 class VdrProjectViewModelProvider(QObject):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+        self.vdrProjectOpenState = False
         self.vdrProjectName = ''
         self.vdrProjectAlkaidCollectorViewModel = VdrProjectCollectorViewModel()
         self.vdrProjectPhoneCollectorViewModel = VdrProjectCollectorViewModel()
         self.vdrProjectMapViewPolylineModel = VdrProjectMapViewPolylineModel()
+
+    def _vdr_project_open_state(self):
+        return self.vdrProjectOpenState
+
+    @Signal
+    def vdr_project_open_state_changed(self):
+        pass
+
+    vdr_project_open_state = Property(
+        bool,
+        _vdr_project_open_state,
+        notify=vdr_project_open_state_changed
+    )
 
     def _vdr_project_name(self):
         return self.vdrProjectName
@@ -77,6 +91,7 @@ class VdrProjectViewModelProvider(QObject):
         current_project_folder_path = os.path.join(datasets_root, current_project_folder_name)
 
         current_project = VdrProject(current_project_folder_path)
+        self.vdrProjectOpenState = True
         self.vdrProjectName = current_project_folder_name
         self.vdrProjectAlkaidCollectorViewModel.setup_model_data(current_project.parse_alkaid_collector_view())
         self.vdrProjectPhoneCollectorViewModel.setup_model_data(current_project.parse_phone_collector_view())
