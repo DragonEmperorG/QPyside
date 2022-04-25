@@ -23,11 +23,15 @@ ApplicationWindow {
     Material.theme: Material.System
 
     readonly property int fontSizeExtraSmall: Qt.application.font.pixelSize * 0.8
+    readonly property int fontSizeDefault: Qt.application.font.pixelSize
     readonly property int fontSizeMedium: Qt.application.font.pixelSize * 1.5
     readonly property int fontSizeLarge: Qt.application.font.pixelSize * 2
     readonly property int fontSizeExtraLarge: Qt.application.font.pixelSize * 5
 
-    property int singleMargin: 16
+    readonly property int layoutMargin: 8
+
+    readonly property int layoutSpacing: 8
+
 
     // property bool scrollBarVisible: projectNameLabelId.height + projectNameValueId.height + vdrProjectAlkaidCollectorName.height + vdrProjectPhoneCollectorListView.contentHeight + vdrProjectPhoneCollectorName.height + vdrProjectAlkaidCollectorListView.contentHeight > projectScrollView.height
 
@@ -48,6 +52,7 @@ ApplicationWindow {
     menuBar: MainMenuBar {
     }
 
+    // https://felgo.com/doc/qt/qtquickcontrols2-imagine-automotive-qml-automotive-qml/
     Frame {
         id: mainFrame
         anchors.fill: parent
@@ -105,7 +110,6 @@ ApplicationWindow {
                 StackLayout {
                     id: baseStackLayout
                     width: parent.width - baseTabBar.width
-
                     height: parent.height
                     anchors.right: toolWindowsComponent.right
 
@@ -115,111 +119,147 @@ ApplicationWindow {
                         id: mapToolTab
                     }
 
-
-                     Item {
+                    ColumnLayout {
                         id: projectScrollView
                         // https://doc.qt.io/qt-5/qml-qtquick-item.html#clip-prop
                         clip: true
+                        spacing: layoutSpacing
 
-                        Text {
-                            id: projectNameLabelId
-                            height: 48
-                            text: qsTr("Project Name")
-                            font.bold: true
-                        }
+                        ColumnLayout {
+                            spacing: layoutSpacing
 
-                        Text {
-                            id: projectNameValueId
-                            height: 48
-                            anchors.top: projectNameLabelId.bottom
-                            text: vdrProjectViewModelProvider.vdr_project_name
-                        }
+                            Layout.margins: layoutMargin
 
-                        Text {
-                            id: vdrProjectAlkaidCollectorName
-                            height: 48
-                            anchors.top: projectNameValueId.bottom
-                            text: qsTr("Alkaid")
-                            font.bold: true
-                        }
+                            ColumnLayout {
+                                spacing: layoutSpacing
 
-                        // https://stackoverflow.com/questions/42550635/qt-height-issue-of-scrollablepage
-                        Frame {
-                            ListView {
-                                id: vdrProjectAlkaidCollectorListView
-                                anchors.top: vdrProjectAlkaidCollectorName.bottom
-                                spacing: singleMargin
-                                height: contentItem.height
-                                // flickableDirection: Flickable.AutoFlickIfNeeded
-                                model: vdrProjectViewModelProvider.alkaid_collector_view_model
-                                delegate: vdrProjectAlkaidCollectorListViewDelegate
-                            }
-                        }
+                                Label {
+                                    id: projectNameLabelId
+                                    text: qsTr("Project Name")
+                                    font.pixelSize: fontSizeDefault
+                                    font.bold: true
+                                }
 
-                        Component {
-                            id: vdrProjectAlkaidCollectorListViewDelegate
-                            Item {
-                                height: 72
-                                Row {
-                                    spacing: 16
-
-                                    // https://stackoverflow.com/questions/50178597/how-to-add-a-custom-role-to-qfilesystemmodel/50180682#50180682
-                                    CheckBox {
-                                        text: qsTr("Alkaid")
-                                        checked: alkaid_polyline_enable
-                                        onCheckedChanged: {
-                                            vdrProjectViewModelProvider.switch_map_polyline(0, index, 0, checked)
-                                        }
-                                    }
-                                    Text { text: name }
-                                    Text { text: type }
-                                    Text { text: counts }
-                                    Text { text: start_timestamp }
-                                    Text { text: stop_timestamp }
-
+                                Label {
+                                    id: projectNameValueId
+                                    text: vdrProjectViewModelProvider.vdr_project_name
+                                    font.pixelSize: fontSizeDefault
+                                    font.bold: true
                                 }
                             }
-                        }
 
+                            ColumnLayout {
+                                spacing: layoutSpacing
 
-                        Text {
-                            id: vdrProjectPhoneCollectorName
-                            height: 48
-                            anchors.top: vdrProjectAlkaidCollectorListView.bottom
-                            text: qsTr("Phone")
-                            font.bold: true
-                        }
+                                Layout.leftMargin: layoutMargin
 
-                        Frame {
-                            ListView {
-                                id: vdrProjectPhoneCollectorListView
-                                anchors.top: vdrProjectPhoneCollectorName.bottom
-                                anchors.bottom: projectScrollView.bottom
-                                model: vdrProjectViewModelProvider.phone_collector_view_model
-                                delegate: Row {
-                                    spacing: 16
+                                Label {
+                                    id: vdrProjectAlkaidCollectorName
+                                    text: qsTr("Alkaid")
+                                    font.pixelSize: fontSizeDefault
+                                    font.bold: true
+                                }
 
-                                    CheckBox {
-                                        text: qsTr("Alkaid")
-                                        checked: alkaid_polyline_enable
-                                        onCheckedChanged: {
-                                            vdrProjectViewModelProvider.switch_map_polyline(1, index, 0, checked)
+                                // https://stackoverflow.com/questions/42550635/qt-height-issue-of-scrollablepage
+                                Frame {
+                                    id: vdrProjectAlkaidCollectorFrame
+                                    leftPadding: 1
+                                    rightPadding: 1
+                                    topPadding: 1
+                                    bottomPadding: 1
+
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 48
+
+                                    ListView {
+                                        id: vdrProjectAlkaidCollectorListView
+                                        // spacing: layoutSpacing
+                                        clip: true
+                                        anchors.fill: parent
+                                        flickableDirection: Flickable.HorizontalFlick
+                                        contentWidth: contentItem.childrenRect.width
+                                        contentHeight: contentItem.childrenRect.height
+
+                                        model: vdrProjectViewModelProvider.alkaid_collector_view_model
+                                        delegate: ItemDelegate {
+                                            id: vdrProjectAlkaidCollectorListViewDelegate
+                                            width: 900
+                                            height: 48
+                                            contentItem: RowLayout {
+                                                spacing: 16
+
+                                                // https://stackoverflow.com/questions/50178597/how-to-add-a-custom-role-to-qfilesystemmodel/50180682#50180682
+                                                CheckBox {
+                                                    text: qsTr("Alkaid")
+                                                    checked: alkaid_polyline_enable
+                                                    onCheckedChanged: {
+                                                        vdrProjectViewModelProvider.switch_map_polyline(0, index, 0, checked)
+                                                    }
+                                                }
+                                                Label { text: name }
+                                                Label { text: type }
+                                                Label { text: counts }
+                                                Label { text: start_timestamp }
+                                                Label { text: stop_timestamp }
+                                            }
                                         }
                                     }
+                                }
 
-                                    CheckBox {
-                                        text: qsTr("GNSS")
-                                        checked: gnss_polyline_enable
-                                        onCheckedChanged: {
-                                            vdrProjectViewModelProvider.switch_map_polyline(1, index, 1, checked)
+
+
+
+                                Label {
+                                    id: vdrProjectPhoneCollectorName
+                                    height: 48
+                                    text: qsTr("Phone")
+                                    font.pixelSize: fontSizeDefault
+                                    font.bold: true
+                                }
+
+                                Frame {
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+
+                                    ListView {
+                                        id: vdrProjectPhoneCollectorListView
+                                        clip: true
+                                        anchors.fill: parent
+                                        flickableDirection: Flickable.HorizontalFlick
+
+                                        model: vdrProjectViewModelProvider.phone_collector_view_model
+                                        delegate: ItemDelegate {
+                                            id: vdrProjectAlkaidCollectorListViewDelegate
+                                            width: parent.width
+                                            height: 48
+                                            contentItem: RowLayout {
+                                                spacing: 16
+
+                                                // https://stackoverflow.com/questions/50178597/how-to-add-a-custom-role-to-qfilesystemmodel/50180682#50180682
+                                                CheckBox {
+                                                    text: qsTr("Alkaid")
+                                                    checked: alkaid_polyline_enable
+                                                    onCheckedChanged: {
+                                                        vdrProjectViewModelProvider.switch_map_polyline(1, index, 0, checked)
+                                                    }
+                                                }
+
+                                                CheckBox {
+                                                    text: qsTr("GNSS")
+                                                    checked: gnss_polyline_enable
+                                                    onCheckedChanged: {
+                                                        vdrProjectViewModelProvider.switch_map_polyline(1, index, 1, checked)
+                                                    }
+                                                }
+
+                                                Label { text: name }
+                                                Label { text: type }
+                                                Label { text: counts }
+                                                Label { text: start_timestamp }
+                                                Label { text: stop_timestamp }
+                                            }
                                         }
                                     }
-
-                                    Text { text: name }
-                                    Text { text: type }
-                                    Text { text: counts }
-                                    Text { text: start_timestamp }
-                                    Text { text: stop_timestamp }
                                 }
                             }
                         }
@@ -246,14 +286,6 @@ ApplicationWindow {
                         columns: 2
 
                         Label { text: "vdrProjectViewModelProvider.vdr_project_open_state: " } Text { text: vdrProjectViewModelProvider.vdr_project_open_state}
-                        Label { text: "projectScrollView.width: " } Text { id: projectScrollViewWidth; text: projectScrollView.width}
-                        // Label { text: "projectColumnLayout.width: " } Text { id: projectColumnLayoutWidth; text: projectColumnLayout.width}
-                        // Label { text: "vdrProjectAlkaidCollectorListView.width: " } Text { id: vdrProjectAlkaidCollectorListViewWidth; text: vdrProjectAlkaidCollectorListView.width}
-                        Label { text: "projectScrollView.height: " } Text { id: projectScrollViewHeight; text: projectScrollView.height}
-                        // Label { text: "projectColumnLayout.height: " } Text { id: projectColumnLayoutHeight; text: projectColumnLayout.height}
-                        Label { text: "vdrProjectAlkaidCollectorListView.height: " } Text { id: vdrProjectAlkaidCollectorListViewHeight; text: vdrProjectAlkaidCollectorListView.height}
-                        Label { text: "projectNameValueId.width: " } Text { id: projectNameValueIdWidth; text: projectNameValueId.width}
-                        // Label { text: "projectToolTab.height: " } Text { id: projectToolTabHeight; text: projectToolTab.height}
 
                     }
                 }

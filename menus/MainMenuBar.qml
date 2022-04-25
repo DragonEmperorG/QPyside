@@ -11,15 +11,6 @@ MenuBar {
              onTriggered: {
                 vdrProjectViewModelProvider.open_project()
                 projectNameValueId.text = vdrProjectViewModelProvider.vdr_project_name
-                vdrProjectAlkaidCollectorListView.forceLayout()
-                // projectColumnLayout.visible = vdrProjectViewModelProvider.vdr_project_open_state
-
-                projectScrollViewWidth.text = projectScrollView.width
-                projectScrollViewHeight.text = projectScrollView.height
-                // projectColumnLayoutWidth.text = projectColumnLayout.width
-                // projectColumnLayoutHeight.text = projectColumnLayout.height
-                // vdrProjectAlkaidCollectorListViewWidth.text = vdrProjectAlkaidCollectorListView.width
-                vdrProjectAlkaidCollectorListViewHeight.text = vdrProjectAlkaidCollectorListView.height
             }
          }
          Action { text: qsTr("&Save") }
