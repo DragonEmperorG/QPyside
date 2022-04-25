@@ -22,7 +22,7 @@ if __name__ == "__main__":
         'VdrProjectViewModelProvider'
     )
 
-    engine.load(os.fspath(Path(__file__).resolve().parent / "MainWindow.qml"))
+    engine.load(os.fspath(Path(__file__).resolve().parent / "qml" / "MainWindow.qml"))
     if not engine.rootObjects():
         sys.exit(-1)
 
