@@ -29,6 +29,7 @@ ApplicationWindow {
     readonly property int fontSizeExtraLarge: Qt.application.font.pixelSize * 5
 
     readonly property int layoutMargin: 8
+    readonly property int layoutDoubleMargin: layoutMargin * 2
 
     readonly property int layoutSpacing: 8
 
@@ -151,7 +152,7 @@ ApplicationWindow {
                             ColumnLayout {
                                 spacing: layoutSpacing
 
-                                Layout.leftMargin: layoutMargin
+                                Layout.leftMargin: layoutDoubleMargin
 
                                 Label {
                                     id: vdrProjectAlkaidCollectorName
@@ -176,14 +177,31 @@ ApplicationWindow {
                                         // spacing: layoutSpacing
                                         clip: true
                                         anchors.fill: parent
-                                        flickableDirection: Flickable.HorizontalFlick
+                                        flickableDirection: Flickable.HorizontalAndVerticalFlick
                                         contentWidth: contentItem.childrenRect.width
                                         contentHeight: contentItem.childrenRect.height
+
+                                        ScrollIndicator.horizontal: ScrollIndicator {
+                                            parent: vdrProjectAlkaidCollectorFrame
+                                            anchors.left: parent.left
+                                            anchors.right: parent.right
+                                            anchors.bottom: parent.bottom
+                                            anchors.bottomMargin: 1
+                                        }
+
+                                       ScrollIndicator.vertical: ScrollIndicator {
+                                            parent: vdrProjectAlkaidCollectorFrame
+                                            anchors.top: parent.top
+                                            anchors.right: parent.right
+                                            anchors.rightMargin: 1
+                                            anchors.bottom: parent.bottom
+                                       }
 
                                         model: vdrProjectViewModelProvider.alkaid_collector_view_model
                                         delegate: ItemDelegate {
                                             id: vdrProjectAlkaidCollectorListViewDelegate
-                                            width: 900
+
+
                                             height: 48
                                             contentItem: RowLayout {
                                                 spacing: 16
@@ -206,18 +224,20 @@ ApplicationWindow {
                                     }
                                 }
 
-
-
-
                                 Label {
                                     id: vdrProjectPhoneCollectorName
-                                    height: 48
                                     text: qsTr("Phone")
                                     font.pixelSize: fontSizeDefault
                                     font.bold: true
                                 }
 
                                 Frame {
+                                    id: vdrProjectPhoneCollectorFrame
+                                    leftPadding: 1
+                                    rightPadding: 1
+                                    topPadding: 1
+                                    bottomPadding: 1
+
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
 
@@ -225,12 +245,29 @@ ApplicationWindow {
                                         id: vdrProjectPhoneCollectorListView
                                         clip: true
                                         anchors.fill: parent
-                                        flickableDirection: Flickable.HorizontalFlick
+                                        flickableDirection: Flickable.HorizontalAndVerticalFlick
+                                        contentWidth: contentItem.childrenRect.width
+                                        contentHeight: contentItem.childrenRect.height
+
+                                        ScrollIndicator.horizontal: ScrollIndicator {
+                                            parent: vdrProjectPhoneCollectorFrame
+                                            anchors.left: parent.left
+                                            anchors.right: parent.right
+                                            anchors.bottom: parent.bottom
+                                            anchors.bottomMargin: 1
+                                        }
+
+                                       ScrollIndicator.vertical: ScrollIndicator {
+                                            parent: vdrProjectPhoneCollectorFrame
+                                            anchors.top: parent.top
+                                            anchors.right: parent.right
+                                            anchors.rightMargin: 1
+                                            anchors.bottom: parent.bottom
+                                       }
 
                                         model: vdrProjectViewModelProvider.phone_collector_view_model
                                         delegate: ItemDelegate {
                                             id: vdrProjectAlkaidCollectorListViewDelegate
-                                            width: parent.width
                                             height: 48
                                             contentItem: RowLayout {
                                                 spacing: 16
