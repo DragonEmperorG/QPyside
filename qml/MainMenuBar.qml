@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtCharts 2.15
 
 
 MenuBar {
@@ -29,7 +30,9 @@ MenuBar {
         Action {
             text: qsTr("Test")
             onTriggered: {
-                projectNameValueId.text = '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789'
+                    // var serie = chartView.createSeries(ChartView.SeriesTypeLine, "Spline", axisX, axisY);
+                    vdrProjectViewModelProvider.test(lineSeries)
+                // vdrProjectViewModelProvider.test(chartView.series(0))
             }
         }
     }

@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
-from PySide2.QtCore import Slot, Property, QObject, Signal
+from PySide2.QtCore import Slot, Property, QObject, Signal, Qt
+from PySide2.QtCharts import QtCharts
+from PySide2.QtGui import QColor
 
 from models.VdrProject import VdrProject
 from models.VdrProjectCollectorViewModel import VdrProjectCollectorViewModel
@@ -13,6 +15,7 @@ class VdrProjectViewModelProvider(QObject):
         super().__init__(parent=parent)
         self.vdrProjectOpenState = False
         self.vdrProjectName = ''
+
         self.vdrProjectAlkaidCollectorViewModel = VdrProjectCollectorViewModel()
         self.vdrProjectPhoneCollectorViewModel = VdrProjectCollectorViewModel()
         self.vdrProjectMapViewPolylineModel = VdrProjectMapViewPolylineModel()
@@ -107,3 +110,12 @@ class VdrProjectViewModelProvider(QObject):
         elif collector_index == 1:
             self.vdrProjectPhoneCollectorViewModel.update_map_polyline(item_index, type, value)
             self.vdrProjectMapViewPolylineModel.update_map_polyline(1 + item_index*2+type, value)
+
+    # https://stackoverflow.com/questions/57536401/how-to-add-qml-scatterseries-to-existing-qml-defined-chartview
+    @Slot(QtCharts.QAbstractSeries)
+    def test(self, serie: QtCharts.QAbstractSeries):
+        print('test')
+        serie.append(0, 0)
+        serie.append(5, 5)
+        serie.append(10, 10)
+        serie.setProperty("width", 2.0)

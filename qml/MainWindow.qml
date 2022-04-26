@@ -329,25 +329,34 @@ ApplicationWindow {
             SplitView.fillWidth: true
 
             /*
+             * https://felgo.com/doc/qt/qtcharts-index/
              * Projects created with Qt Creator's Qt Quick Application wizard are based on the Qt Quick 2 template that uses QGuiApplication by default.
              * All such QGuiApplication instances in the project must be replaced with QApplication as the module depends on Qt's Graphics View Framework for rendering.
              * https://felgo.com/doc/qt/qtcharts-qmlchart-example/
              */
             ChartView {
-                title: "Spline"
+                id: chartView
                 anchors.fill: parent
                 antialiasing: true
 
-                SplineSeries {
-                    name: "SplineSeries"
-                    XYPoint { x: 0; y: 0.0 }
-                    XYPoint { x: 1.1; y: 3.2 }
-                    XYPoint { x: 1.9; y: 2.4 }
+
+
+                LineSeries {
+                    id: lineSeries
+                    name: "LineSeries"
+                    XYPoint { x: 0; y: 0 }
+                    XYPoint { x: 1.1; y: 2.1 }
+                    XYPoint { x: 1.9; y: 3.3 }
                     XYPoint { x: 2.1; y: 2.1 }
-                    XYPoint { x: 2.9; y: 2.6 }
-                    XYPoint { x: 3.4; y: 2.3 }
-                    XYPoint { x: 4.1; y: 3.1 }
+                    XYPoint { x: 2.9; y: 4.9 }
+                    XYPoint { x: 3.4; y: 3.0 }
+                    XYPoint { x: 4.1; y: 3.3 }
                 }
+
+                //Component.onCompleted: {
+                   // var serie = chartView.createSeries(ChartView.SeriesTypeLine, "Spline", axisX, axisY);
+                    //vdrProjectViewModelProvider.test(serie)
+                //}
             }
 
         }

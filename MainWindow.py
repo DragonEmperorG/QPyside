@@ -10,9 +10,9 @@ from PySide2.QtWidgets import QApplication
 from models.VdrProjectViewModelProvider import VdrProjectViewModelProvider
 
 if __name__ == "__main__":
+    # https://stackoverflow.com/questions/57514937/qml-charts-causes-crash-on-startup
     app = QApplication(sys.argv)
     QQuickStyle.setStyle("Material")
-    engine = QQmlApplicationEngine()
 
     qmlRegisterType(
         VdrProjectViewModelProvider,
@@ -22,6 +22,7 @@ if __name__ == "__main__":
         'VdrProjectViewModelProvider'
     )
 
+    engine = QQmlApplicationEngine()
     engine.load(os.fspath(Path(__file__).resolve().parent / "qml" / "MainWindow.qml"))
     if not engine.rootObjects():
         sys.exit(-1)
