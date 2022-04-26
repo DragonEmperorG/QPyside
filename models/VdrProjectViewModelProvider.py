@@ -1,5 +1,8 @@
 import os
+from enum import Enum, auto
 from pathlib import Path
+
+from PySide2 import QtQml
 from PySide2.QtCore import Slot, Property, QObject, Signal, Qt
 from PySide2.QtCharts import QtCharts
 from PySide2.QtGui import QColor
@@ -9,10 +12,28 @@ from models.VdrProjectCollectorViewModel import VdrProjectCollectorViewModel
 from models.VdrProjectMapViewPolylineModel import VdrProjectMapViewPolylineModel
 
 
+# https://code.qt.io/cgit/qt/qtcharts.git/tree/src/chartsqml2/declarativechart_p.h#n105
+class SeriesType(Enum):
+    SeriesTypeLine = 0
+    SeriesTypeArea = auto()
+    SeriesTypeBar = auto()
+    SeriesTypeStackedBar = auto()
+    SeriesTypePercentBar = auto()
+    SeriesTypePie = auto()
+    SeriesTypeScatter = auto()
+    SeriesTypeSpline = auto()
+    SeriesTypeHorizontalBar = auto()
+    SeriesTypeHorizontalStackedBar = auto()
+    SeriesTypeHorizontalPercentBar = auto()
+    SeriesTypeBoxPlot = auto()
+    SeriesTypeCandlestick = auto()
+
+
 # https://stackoverflow.com/questions/54687953/declaring-a-qabstractlistmodel-as-a-property-in-pyside2
 class VdrProjectViewModelProvider(QObject):
-    def __init__(self, parent=None):
-        super().__init__(parent=parent)
+    def __init__(self, engine, parent=None):
+        super().__init__(parent)
+        self._QQmlApplicationEngine = engine
         self.vdrProjectOpenState = False
         self.vdrProjectName = ''
 
@@ -112,10 +133,36 @@ class VdrProjectViewModelProvider(QObject):
             self.vdrProjectMapViewPolylineModel.update_map_polyline(1 + item_index*2+type, value)
 
     # https://stackoverflow.com/questions/57536401/how-to-add-qml-scatterseries-to-existing-qml-defined-chartview
-    @Slot(QtCharts.QAbstractSeries)
-    def test(self, serie: QtCharts.QAbstractSeries):
+    @Slot(QObject)
+    def test(self, chart_view: QObject):
         print('test')
-        serie.append(0, 0)
-        serie.append(5, 5)
-        serie.append(10, 10)
-        serie.setProperty("width", 2.0)
+        context = QtQml.QQmlContext(self._QQmlApplicationEngine.rootContext())
+        context.setContextProperty("chart_view", chart_view)
+        chart_axis_x = QtCharts.QValueAxis()
+        chart_axis_y = QtCharts.QValueAxis()
+        context.setContextProperty("axis_x", chart_axis_x)
+        context.setContextProperty("axis_y", chart_axis_y)
+        context.setContextProperty("type", SeriesType.SeriesTypeScatter.value)
+        script = """chart_view.createSeries(type, "scatter series", axis_x, axis_y);"""
+        expression = QtQml.QQmlExpression(context, chart_view, script)
+        serie, valueIsUndefined = expression.evaluate()
+        if expression.hasError():
+            print(expression.error())
+            return
+
+        import random
+
+        mx, Mx = chart_axis_x.property("min"), chart_axis_x.property("max")
+        my, My = chart_axis_y.property("min"), chart_axis_y.property("max")
+        if not valueIsUndefined:
+            for _ in range(100):
+                x = random.uniform(mx, Mx)
+                y = random.uniform(my, My)
+                serie.append(x, y)
+            # https://doc.qt.io/qt-5/qml-qtcharts-scatterseries.html#borderColor-prop
+            serie.setProperty("borderColor", QtGui.QColor("salmon"))
+            # https://doc.qt.io/qt-5/qml-qtcharts-scatterseries.html#brush-prop
+            serie.setProperty("brush", QtGui.QBrush(QtGui.QColor("green")))
+            # https://doc.qt.io/qt-5/qml-qtcharts-scatterseries.html#borderColor-prop
+            serie.setProperty("borderWidth", 4.0)
+            return serie

@@ -14,15 +14,11 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     QQuickStyle.setStyle("Material")
 
-    qmlRegisterType(
-        VdrProjectViewModelProvider,
-        'VdrProjectViewModelProvider',
-        1,
-        0,
-        'VdrProjectViewModelProvider'
-    )
-
     engine = QQmlApplicationEngine()
+
+    vdrProjectViewModelProvider = VdrProjectViewModelProvider(engine)
+    engine.rootContext().setContextProperty("vdrProjectViewModelProvider", vdrProjectViewModelProvider)
+
     engine.load(os.fspath(Path(__file__).resolve().parent / "qml" / "MainWindow.qml"))
     if not engine.rootObjects():
         sys.exit(-1)
