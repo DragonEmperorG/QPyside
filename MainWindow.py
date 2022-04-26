@@ -3,14 +3,14 @@ import os
 from pathlib import Path
 import sys
 
-from PySide2.QtGui import QGuiApplication
 from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PySide2.QtQuickControls2 import QQuickStyle
+from PySide2.QtWidgets import QApplication
 
 from models.VdrProjectViewModelProvider import VdrProjectViewModelProvider
 
 if __name__ == "__main__":
-    app = QGuiApplication(sys.argv)
+    app = QApplication(sys.argv)
     QQuickStyle.setStyle("Material")
     engine = QQmlApplicationEngine()
 
