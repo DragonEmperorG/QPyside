@@ -1,9 +1,12 @@
 import os
+import time
+from datetime import datetime
 from pathlib import Path
 
 from PySide2 import QtQml
-from PySide2.QtCore import Slot, Property, QObject, Signal
+from PySide2.QtCore import Slot, Property, QObject, Signal, QPointF
 from PySide2.QtGui import QColor, QBrush
+from PySide2.QtCharts import QtCharts
 
 from models.ChartViewSeriesType import ChartViewSeriesType
 from models.VdrProject import VdrProject
@@ -19,6 +22,7 @@ class VdrProjectViewModelProvider(QObject):
         self.vdrProjectOpenState = False
         self.vdrProjectName = ''
 
+        self.vdrProject = None
         self.vdrProjectAlkaidCollectorViewModel = VdrProjectCollectorViewModel()
         self.vdrProjectPhoneCollectorViewModel = VdrProjectCollectorViewModel()
         self.vdrProjectMapViewPolylineModel = VdrProjectMapViewPolylineModel()
@@ -88,20 +92,24 @@ class VdrProjectViewModelProvider(QObject):
         notify=map_view_polyline_model_changed
     )
 
-    @Slot()
-    def open_project(self):
+    @Slot(QObject)
+    def open_project(self, project_name_label):
         datasets_root = os.path.join(Path(__file__).resolve().parent.parent, 'datasets')
         # project_list = os.listdir(datasets_root)
 
         current_project_folder_name = '20220315_WHUSPARK'
         current_project_folder_path = os.path.join(datasets_root, current_project_folder_name)
 
-        current_project = VdrProject(current_project_folder_path)
+        self.vdrProject = VdrProject(current_project_folder_path)
         self.vdrProjectOpenState = True
         self.vdrProjectName = current_project_folder_name
-        self.vdrProjectAlkaidCollectorViewModel.setup_model_data(current_project.parse_alkaid_collector_view())
-        self.vdrProjectPhoneCollectorViewModel.setup_model_data(current_project.parse_phone_collector_view())
-        self.vdrProjectMapViewPolylineModel.setup_model_data(current_project.parse_map_view_polyline())
+        project_name_label.setProperty("text", current_project_folder_name)
+
+        self.vdrProjectAlkaidCollectorViewModel.setup_model_data(self.vdrProject.parse_alkaid_collector_view())
+
+        self.vdrProjectPhoneCollectorViewModel.setup_model_data(self.vdrProject.parse_phone_collector_view())
+
+        self.vdrProjectMapViewPolylineModel.setup_model_data(self.vdrProject.parse_map_view_polyline())
 
     @Slot(int, int, int, bool)
     def switch_map_polyline(self, collector_index: int, item_index: int, type: int, value: bool):
@@ -116,33 +124,37 @@ class VdrProjectViewModelProvider(QObject):
 
     # https://stackoverflow.com/questions/57536401/how-to-add-qml-scatterseries-to-existing-qml-defined-chartview
     @Slot(QObject, QObject, QObject)
-    def test(self, chart_view: QObject, chart_axis_x, chart_axis_y):
+    def test(self, chart_view: QObject, chart_view_axis_x, chart_view_axis_y):
         print('test')
         context = QtQml.QQmlContext(self._QQmlApplicationEngine.rootContext())
         context.setContextProperty("chart_view", chart_view)
-        context.setContextProperty("axis_x", chart_axis_x)
-        context.setContextProperty("axis_y", chart_axis_y)
-        context.setContextProperty("type", ChartViewSeriesType.SeriesTypeScatter.value)
-        script = """chart_view.createSeries(type, "scatter series", axis_x, axis_y);"""
+        context.setContextProperty("axis_x", chart_view_axis_x)
+        context.setContextProperty("axis_y", chart_view_axis_y)
+        context.setContextProperty("type", ChartViewSeriesType.SeriesTypeLine.value)
+
+        script = """chart_view.createSeries(type, "line series", axis_x, axis_y);"""
         expression = QtQml.QQmlExpression(context, chart_view, script)
-        serie, valueIsUndefined = expression.evaluate()
+        series, valueIsUndefined = expression.evaluate()
         if expression.hasError():
             print(expression.error())
             return
 
-        import random
-
-        mx, Mx = chart_axis_x.property("min"), chart_axis_x.property("max")
-        my, My = chart_axis_y.property("min"), chart_axis_y.property("max")
         if not valueIsUndefined:
-            for _ in range(100):
-                x = random.uniform(mx, Mx)
-                y = random.uniform(my, My)
-                serie.append(x, y)
-            # https://doc.qt.io/qt-5/qml-qtcharts-scatterseries.html#borderColor-prop
-            serie.setProperty("borderColor", QColor("salmon"))
-            # https://doc.qt.io/qt-5/qml-qtcharts-scatterseries.html#brush-prop
-            serie.setProperty("brush", QBrush(QColor("green")))
-            # https://doc.qt.io/qt-5/qml-qtcharts-scatterseries.html#borderColor-prop
-            serie.setProperty("borderWidth", 4.0)
-            return serie
+            test_raw_data_frame = self.vdrProject.parse_alkaid_collector_chart_view()
+            test_raw_data_point_series = test_raw_data_frame.apply(
+                # s
+                lambda row: QPointF(row.DATA_POS_TIMESTAMP.timestamp() * 1000, row.COLUMN_6),
+                axis=1
+            )
+            test_raw_data_point_list = test_raw_data_point_series.tolist()
+            series.append(test_raw_data_point_list)
+
+            # show_raw_data_point_list = test_raw_data_point_list[0:20]
+            # series.append(show_raw_data_point_list)
+
+            # series.useOpenGL = True
+            chart_view_axis_x.setProperty("max", test_raw_data_point_list[-1].x())
+            chart_view_axis_x.setProperty("min", test_raw_data_point_list[0].x())
+            chart_view_axis_y.setProperty("max", 1)
+            chart_view_axis_y.setProperty("min", -1)
+

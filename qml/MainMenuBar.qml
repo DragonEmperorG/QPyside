@@ -10,8 +10,7 @@ MenuBar {
          Action {
              text: qsTr("&Open...")
              onTriggered: {
-                vdrProjectViewModelProvider.open_project()
-                projectNameValueId.text = vdrProjectViewModelProvider.vdr_project_name
+                vdrProjectViewModelProvider.open_project(projectNameValueId)
             }
          }
          Action { text: qsTr("&Save") }
@@ -30,7 +29,7 @@ MenuBar {
         Action {
             text: qsTr("Test")
             onTriggered: {
-                vdrProjectViewModelProvider.test(chartView, bscan0_xAxix, bscan0_yAxis)
+                vdrProjectViewModelProvider.test(vdrChartView, vdrChartViewAxisX, vdrChartViewAxisY)
             }
         }
     }

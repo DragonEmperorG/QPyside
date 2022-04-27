@@ -108,3 +108,6 @@ class VdrProject:
                 phone_collector_intersection_start_timestamp,
                 phone_collector_intersection_stop_timestamp
             )
+
+    def parse_alkaid_collector_chart_view(self):
+        return self.alkaid_collector.clipped_analyzer_imu_data_data
