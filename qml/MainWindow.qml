@@ -132,6 +132,7 @@ ApplicationWindow {
                                 font.bold: true
                             }
 
+                            // https://stackoverflow.com/questions/44951785/qml-adding-labels-dynamically
                             Label {
                                 id: projectNameValueId
                                 text: vdrProjectViewModelProvider.vdr_project_name
@@ -335,7 +336,17 @@ ApplicationWindow {
                 anchors.fill: parent
                 antialiasing: true
 
+                ValueAxis {
+                            id: bscan0_xAxix
+                            min: 0
+                            max: 10
+                        }
 
+                        ValueAxis {
+                            id: bscan0_yAxis
+                            min: -100
+                            max: 100
+                        }
 
 
             }

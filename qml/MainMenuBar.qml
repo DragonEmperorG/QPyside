@@ -30,9 +30,7 @@ MenuBar {
         Action {
             text: qsTr("Test")
             onTriggered: {
-                    // var serie = chartView.createSeries(ChartView.SeriesTypeLine, "Spline", axisX, axisY);
-                    vdrProjectViewModelProvider.test(chartView)
-                // vdrProjectViewModelProvider.test(chartView.series(0))
+                vdrProjectViewModelProvider.test(chartView, bscan0_xAxix, bscan0_yAxis)
             }
         }
     }
