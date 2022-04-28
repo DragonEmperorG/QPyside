@@ -152,7 +152,7 @@ class VdrProjectViewModelProvider(QObject):
             # show_raw_data_point_list = test_raw_data_point_list[0:20]
             # series.append(show_raw_data_point_list)
 
-            # series.useOpenGL = True
+            series.useOpenGL = True
             chart_view_axis_x.setProperty("max", test_raw_data_point_list[-1].x())
             chart_view_axis_x.setProperty("min", test_raw_data_point_list[0].x())
             chart_view_axis_y.setProperty("max", 1)
