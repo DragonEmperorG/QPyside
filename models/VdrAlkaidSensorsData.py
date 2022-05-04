@@ -71,6 +71,7 @@ class VdrAlkaidSensorsData:
 
     def __init__(self, path):
         self.platform_name = 'alkaid'
+        self.folder_path = path
         self.raw_pos_data = None
         self.raw_data_data = None
         self.clipped_analyzer_imu_data_data = None
@@ -143,3 +144,25 @@ class VdrAlkaidSensorsData:
         self.data_data_row_counts = self.clipped_analyzer_imu_data_data.shape[0]
         self.data_data_start_timestamp = self.clipped_analyzer_imu_data_data.loc[0, VdrAlkaidSensorsData._DATA_POS_TIMESTAMP]
         self.data_data_stop_timestamp = self.clipped_analyzer_imu_data_data.loc[self.data_data_row_counts - 1, VdrAlkaidSensorsData._DATA_POS_TIMESTAMP]
+
+    def save_clipped_data(self):
+        imu_data_file_name = 'VdrExperimentAlkaidIMUDataClipped.csv'
+        imu_data_file_path = os.path.join(self.folder_path, imu_data_file_name)
+        self.clipped_analyzer_imu_data_data.to_csv(
+            imu_data_file_path,
+            float_format='%17.13f',
+            header=False,
+            index=False
+        )
+
+        fusion_data_file_name = 'VdrExperimentAlkaidFusionDataClipped.csv'
+        fusion_data_file_path = os.path.join(self.folder_path, fusion_data_file_name)
+        write_fusion_data = self.clipped_analyzer_pos_data.copy(deep=True)
+        write_fusion_data.reset_index(drop=True, inplace=True)
+        # write_fusion_data[self._POS_TIMESTAMP] = write_fusion_data[self._POS_TIMESTAMP]
+        write_fusion_data.to_csv(
+            fusion_data_file_path,
+            float_format='%17.13f',
+            header=False,
+            index=False
+        )

@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 from PySide2.QtPositioning import QGeoCoordinate
 
@@ -104,6 +106,7 @@ class VdrPhoneSensorsData:
     ]
 
     def __init__(self, phone_name, path):
+        self.folder_path = os.path.dirname(path)
         self.alkaid_polyline_path = None
         self.gnss_polyline_path = None
 
@@ -149,3 +152,13 @@ class VdrPhoneSensorsData:
             axis=1
         )
         self.gnss_polyline_path = clipped_analyzer_gnss_data_coordinate_series.tolist()
+
+    def save_clipped_data(self):
+        clipped_data_file_name = 'VdrExperimentDataClipped.csv'
+        clipped_data_file_path = os.path.join(self.folder_path, clipped_data_file_name)
+        self.clipped_analyzer_data.to_csv(
+            clipped_data_file_path,
+            float_format='%17.13f',
+            header=False,
+            index=False
+        )

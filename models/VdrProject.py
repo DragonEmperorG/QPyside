@@ -23,6 +23,7 @@ class VdrProject:
                 self.parse_phone_collector_data(current_collector_folder_path)
 
         self.clip_collector_data()
+        self.save_clipped_collector_data()
 
     def parse_phone_collector_data(self, path):
         file_list = os.listdir(path)
@@ -108,6 +109,11 @@ class VdrProject:
                 phone_collector_intersection_start_timestamp,
                 phone_collector_intersection_stop_timestamp
             )
+
+    def save_clipped_collector_data(self):
+        self.alkaid_collector.save_clipped_data()
+        for phone_collector in self.phone_collector_list:
+            phone_collector.save_clipped_data()
 
     def parse_alkaid_collector_chart_view(self):
         return self.alkaid_collector.clipped_analyzer_imu_data_data
