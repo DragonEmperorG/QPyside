@@ -3,7 +3,7 @@ cProjectFolderPath = 'D:\GithubRepositories\QPyside\datasets\20220315_WHUSPARK';
 
 cAlkaidSensorsFilePath = [cProjectFolderPath '\' 'Alkaid' '\' 'VdrExperimentAlkaidIMUDataClipped.csv'];
 vdrExperimentAlkaidIMUDataClipped = readtable(cAlkaidSensorsFilePath,'Delimiter',',');
-vdrExperimentAlkaidIMUDataClipped = vdrExperimentAlkaidIMUDataClipped(1:3,:);
+% vdrExperimentAlkaidIMUDataClipped = vdrExperimentAlkaidIMUDataClipped(1:3,:);
 vdrExperimentAlkaidIMUDataClippedCounts = height(vdrExperimentAlkaidIMUDataClipped);
 vdrExperimentAlkaidIMUDateTimeClipped = datetime(zeros(vdrExperimentAlkaidIMUDataClippedCounts,1), 0, 0,'TimeZone','Asia/Shanghai'); 
 for i = 1:vdrExperimentAlkaidIMUDataClippedCounts
@@ -20,7 +20,7 @@ vdrExperimentAlkaidIMUTimeTableClipped = table2timetable(vdrExperimentAlkaidIMUD
 
 cAlkaidFusionFilePath = [cProjectFolderPath '\' 'Alkaid' '\' 'VdrExperimentAlkaidFusionDataClipped.csv'];
 vdrExperimentAlkaidFusionDataClipped = readtable(cAlkaidFusionFilePath,'Delimiter',',');
-vdrExperimentAlkaidFusionDataClipped = vdrExperimentAlkaidFusionDataClipped(1:3,:);
+% vdrExperimentAlkaidFusionDataClipped = vdrExperimentAlkaidFusionDataClipped(1:3,:);
 vdrExperimentAlkaidFusionDataClippedCounts = height(vdrExperimentAlkaidFusionDataClipped);
 vdrExperimentAlkaidFusionDateTimeClipped = datetime(zeros(vdrExperimentAlkaidFusionDataClippedCounts,1), 0, 0,'TimeZone','Asia/Shanghai');
 for i = 1:vdrExperimentAlkaidFusionDataClippedCounts
@@ -43,11 +43,12 @@ vdrExperimentPhoneDateTimeClipped = datetime(zeros(vdrExperimentPhoneDataClipped
 for i = 1:vdrExperimentPhoneDataClippedCounts
     alkaidSensorsDataTimestampCell = vdrExperimentPhoneDataClipped.Var1(i);
     alkaidSensorsDataDateTime = datetime(alkaidSensorsDataTimestampCell{1, 1},'InputFormat','yyyy-MM-dd HH:mm:ss.SSSSSSSSS+08:00','TimeZone','Asia/Shanghai');
-    vdrExperimentAlkaidFusionDataClipped.Var1(i) = {alkaidSensorsDataDateTime};
+    vdrExperimentPhoneDataClipped.Var1(i) = {alkaidSensorsDataDateTime};
     vdrExperimentPhoneDateTimeClipped(i,1) = alkaidSensorsDataDateTime;
 end
-vdrExperimentAlkaidFusionTimeTableClipped = table2timetable(vdrExperimentAlkaidFusionDataClipped,'RowTimes',vdrExperimentAlkaidFusionDateTimeClipped);
+vdrExperimentPhoneTimeTableClipped = table2timetable(vdrExperimentPhoneDataClipped,'RowTimes',vdrExperimentPhoneDateTimeClipped);
 
-VdrExperimentAlkaidDataClippedFilePath = [cProjectFolderPath '\' 'Alkaid' '\' 'VdrExperimentAlkaidDataClipped'];
-save(VdrExperimentAlkaidDataClippedFilePath,'vdrExperimentAlkaidIMUTimeTableClipped','vdrExperimentAlkaidFusionTimeTableClipped');
+VdrExperimentPhoneClippedFilePath = [cProjectFolderPath '\' 'SAMSUNG_GalaxyS8\20220315_102823_Q2' '\' 'vdrExperimentPhoneTimeTableClipped'];
+save(VdrExperimentPhoneClippedFilePath,'vdrExperimentPhoneTimeTableClipped');
+
 
