@@ -57,6 +57,7 @@ localPhoneRequestAlkaidDateTime = datetime(zeros(vdrExperimentPhoneDataClippedCo
 localPhoneResponseAlkaidDateTime = datetime(zeros(vdrExperimentPhoneDataClippedCounts,1), 0, 0,'TimeZone','Asia/Shanghai');
 localPhoneMapAlkaidDateTime = datetime(zeros(vdrExperimentPhoneDataClippedCounts,1), 0, 0,'TimeZone','Asia/Shanghai');
 alkaidDateTime = datetime(zeros(vdrExperimentPhoneDataClippedCounts,1), 0, 0,'TimeZone','Asia/Shanghai');
+progressIndicator = 0;
 for i = 1:vdrExperimentPhoneDataClippedCounts
     vdrExperimentPhoneDateTimeClipped(i,1) = parseDateTime(vdrExperimentPhoneDataClipped.Var1(i));
     localPhoneRequestAlkaidDateTime(i,1) = parseDateTime(vdrExperimentPhoneDataClipped.Var36(i));
@@ -65,6 +66,13 @@ for i = 1:vdrExperimentPhoneDataClippedCounts
     dtHalf = dt * 0.5;
     localPhoneMapAlkaidDateTime(i,1) = localPhoneRequestAlkaidDateTime(i,1) + dtHalf;
     alkaidDateTime(i,1) = parseDateTime(vdrExperimentPhoneDataClipped.Var39(i));
+    
+    progressIndicator = progressIndicator + 1;
+    if (progressIndicator == 100) || (i == vdrExperimentPhoneDataClippedCounts)
+        fprintf("Parser progress: %d/%d\n", i, vdrExperimentPhoneDataClippedCounts);
+        progressIndicator = 0;
+    end
+    
 end
 vdrExperimentPhoneDataClipped = addvars(vdrExperimentPhoneDataClipped,vdrExperimentPhoneDateTimeClipped,'NewVariableNames','LocalPhoneDateTime','After','Var1');
 vdrExperimentPhoneDataClipped = addvars(vdrExperimentPhoneDataClipped,localPhoneRequestAlkaidDateTime,'NewVariableNames','LocalPhoneRequestAlkaidDateTime','After','Var36');
@@ -73,8 +81,17 @@ vdrExperimentPhoneDataClipped = addvars(vdrExperimentPhoneDataClipped,localPhone
 vdrExperimentPhoneDataClipped = addvars(vdrExperimentPhoneDataClipped,alkaidDateTime,'NewVariableNames','AlkaidDateTime','After','Var39');
 vdrExperimentPhoneTimeTableClipped = table2timetable(vdrExperimentPhoneDataClipped,'RowTimes',vdrExperimentPhoneDateTimeClipped);
 
+vdrExperimentPhoneTimeTableClippedSortedIndicator = issorted(vdrExperimentPhoneTimeTableClipped);
+fprintf("Sorted: %d\n", vdrExperimentPhoneTimeTableClippedSortedIndicator);
+
+vdrExperimentPhoneUniqueTimeTableClipped = unique(vdrExperimentPhoneTimeTableClipped.Time);
+vdrExperimentPhoneFirstUniqueTimeTableClipped = retime(vdrExperimentPhoneTimeTableClipped,vdrExperimentPhoneUniqueTimeTableClipped,'firstvalue');
+vdrExperimentPhoneUniqueTimeTableClippedCounts = height(vdrExperimentPhoneUniqueTimeTableClipped);
+duplicateCounts = vdrExperimentPhoneDataClippedCounts - vdrExperimentPhoneUniqueTimeTableClippedCounts;
+fprintf("Duplicated: %d\n", duplicateCounts);
+
 VdrExperimentPhoneClippedFilePath = [cProjectFolderPath '\' 'SAMSUNG_GalaxyS8\20220315_102823_Q2' '\' 'vdrExperimentPhoneTimeTableClipped'];
-save(VdrExperimentPhoneClippedFilePath,'vdrExperimentPhoneTimeTableClipped');
+save(VdrExperimentPhoneClippedFilePath,'vdrExperimentPhoneFirstUniqueTimeTableClipped');
 
 
 % cPhoneExperimentDataClippedFolderPath = [cProjectFolderPath '\' 'GOOGLE_Pixel3\20220315_100846_ Q2'];
