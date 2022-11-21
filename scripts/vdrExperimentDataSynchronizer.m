@@ -1,5 +1,5 @@
 clear;
-cProjectFolderPath = 'D:\GithubRepositories\QPyside\datasets\20220315_WHUSPARK';
+cProjectFolderPath = 'C:\GithubRepositories\QPyside\datasets\20220315_WHUSPARK';
 
 cPhoneExperimentDataClippedFilePath = [cProjectFolderPath '\' 'SAMSUNG_GalaxyS8\20220315_102823_Q2' '\' 'vdrExperimentPhoneTimeTableClipped'];
 load(cPhoneExperimentDataClippedFilePath);

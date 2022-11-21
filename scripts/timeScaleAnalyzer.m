@@ -91,7 +91,7 @@ vdrExperimentPhoneRegularTimeTableClipped = addvars(vdrExperimentPhoneRegularTim
 vdrExperimentPhoneRegularTimeTable = timetable2table(vdrExperimentPhoneRegularTimeTableClipped,'ConvertRowTimes',false);
 vdrExperimentPhoneRegularSynchronizeTimeTable = table2timetable(vdrExperimentPhoneRegularTimeTable,'RowTimes',vdrExperimentPhoneRegularTimeTable.AlkaidSynchronizeDateTime);
 vdrExperimentPhoneClippedFilePath = [cProjectFolderPath '\' 'SAMSUNG_GalaxyS8\20220315_102823_Q2' '\' 'vdrExperimentPhoneTimeTableClipped'];
-save(vdrExperimentPhoneClippedFilePath,'-append','vdrExperimentPhoneRegularSynchronizeTimeTable');
+% save(vdrExperimentPhoneClippedFilePath,'-append','vdrExperimentPhoneRegularSynchronizeTimeTable');
 
 % synchronizeIndex = sort([synchronizeBaseIndex; synchronizeBasePlusOneIndex]);
 % vdrExperimentPhoneMapAlkaidSynchronizeTimeTable = vdrExperimentPhoneMapAlkaidUniqueTimeTableMA(synchronizeIndex,:);

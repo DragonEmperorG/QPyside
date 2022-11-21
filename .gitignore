@@ -131,6 +131,7 @@ dmypy.json
 #
 .idea/
 datasets/
+output/
 
 # Matlab
 *.asv
