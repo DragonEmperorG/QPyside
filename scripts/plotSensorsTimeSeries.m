@@ -1,16 +1,20 @@
 clear;
-cProjectFolderPath = 'D:\GithubRepositories\QPyside\datasets\20220315_WHUSPARK';
+cProjectFolderPath = 'C:\GithubRepositories\QPyside\datasets\20220315_WHUSPARK';
 
-cAlkaidSensorsFilePath = [cProjectFolderPath '\' 'Alkaid' '\' 'VdrExperimentAlkaidDataClipped'];
-load(cAlkaidSensorsFilePath);
+% cAlkaidSensorsFilePath = [cProjectFolderPath '\' 'Alkaid' '\' 'VdrExperimentAlkaidDataClipped'];
+% load(cAlkaidSensorsFilePath);
 
-cPhoneExperimentDataClippedFilePath = [cProjectFolderPath '\' 'SAMSUNG_GalaxyS8\20220315_102823_Q2' '\' 'vdrExperimentPhoneTimeTableClipped'];
-load(cPhoneExperimentDataClippedFilePath);
+% cPhoneExperimentDataClippedFilePath = [cProjectFolderPath '\' 'SAMSUNG_GalaxyS8\20220315_102823_Q2' '\' 'vdrExperimentPhoneTimeTableClipped'];
+% load(cPhoneExperimentDataClippedFilePath);
 
 cTrainFilePath = [cProjectFolderPath '\' 'SAMSUNG_GalaxyS8\20220315_102823_Q2' '\' 'trainVdrExperimentTimeTable'];
 load(cTrainFilePath);
 
-slerp
+trainVdrExperimentCoordinate = trainVdrExperimentTimeTable{:,33:34};
+% trainVdrExperimentCoordinate = trainVdrExperimentTimeTable{:,50:51};
+plotVdrExperimentCoordinate = trainVdrExperimentCoordinate - trainVdrExperimentCoordinate(1,:);
+figure;
+plot(plotVdrExperimentCoordinate(:,1), plotVdrExperimentCoordinate(:,2));
 
 % figure;
 % stackedplot(vdrExperimentAlkaidIMUTimeTableClipped,{["Var4","Var5","Var6"] ["Var7","Var8","Var9"] ["Var10","Var11","Var12"]});
@@ -29,11 +33,14 @@ slerp
 
 figure;
 stackedplot(trainVdrExperimentTimeTable,{
-["AccelerometerX",...
-"AccelerometerY",...
-"AccelerometerZ"] ...
-["ProjCoordinateX"] ...
-["ProjCoordinateY"]});
+    ["GyroscopeX",...
+    "GyroscopeY",...
+    "GyroscopeZ"] ...
+    ["AccelerometerX",...
+    "AccelerometerY",...
+    "AccelerometerZ"] ...
+    ["ProjCoordinateX"] ...
+    ["ProjCoordinateY"]});
 
 % figure;
 % stackedplot(trainVdrExperimentTimeTable,{
